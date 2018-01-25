@@ -1,0 +1,224 @@
+<pro-header [title]="'颜值匹配'">
+  <ng-template #action>
+    <ng-container *ngIf="selectedRows.length > 0">
+      <button nz-button [nzSize]="'large'">批量操作</button>
+      <nz-dropdown [nzPlacement]="'bottomLeft'">
+        <button nz-button nz-dropdown [nzSize]="'large'">
+          更多操作 <i class="anticon anticon-down"></i>
+        </button>
+        <ul nz-menu>
+          <li nz-menu-item (click)="remove()">删除</li>
+          <li nz-menu-item (click)="approval()">批量审批</li>
+        </ul>
+      </nz-dropdown>
+      &nbsp;
+    </ng-container>
+
+    <button nz-button routerLink="detail/0" [nzType]="'primary'" [nzSize]="'large'">
+      <i class="anticon anticon-plus"></i><span>创建</span>
+    </button>
+
+    <nz-dropdown>
+      <button nz-button nz-dropdown [nzType]="'primary'" [nzSize]="'large'">
+        <span>导出</span> <i class="anticon anticon-down"></i>
+      </button>
+      <ul nz-menu>
+        <li nz-menu-item>Excel</li>
+        <li nz-menu-item>JSON</li>
+        <li nz-menu-item>PNG</li>
+      </ul>
+    </nz-dropdown>
+  </ng-template>
+</pro-header>
+<nz-card [nzBordered]="false">
+
+  <section class="table-list">
+    <h3 class="table-name">活动地址:</h3>
+    http://games.ixingban.com/chenxiaopair/index.aspx?accessToken=
+    <div class="table-container">
+      <h3 class="table-name">POST /api/FaceRecognition/FaceComparison</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>userId</td>
+          <td>用户的AppUserId</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>platForm</td>
+          <td>用户平台</td>
+          <td>1(APP)2(微信)3(微博)</td>
+        </tr>
+        <tr>
+          <td>nickName</td>
+          <td>用户昵称(微信的或APP)</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>headerImgUrl</td>
+          <td>用户头像(微信或APP)</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>country</td>
+          <td>微信的用户国家</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>comparisonId</td>
+          <td>后台生成值</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>confidence</td>
+          <td>相似度</td>
+          <td>number</td>
+        </tr>
+        <tr>
+          <td>commentCount</td>
+          <td>点评数</td>
+          <td>number</td>
+        </tr>
+        <tr>
+          <td>ranking</td>
+          <td>排名数</td>
+          <td>number</td>
+        </tr>
+        <tr>
+          <td>imageStringBase64</td>
+          <td>用户上传Base64值</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>img1Url</td>
+          <td>返回图片</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>img2Url</td>
+          <td>返回图片</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>errcode</td>
+          <td>报错编码</td>
+          <td>number</td>
+        </tr>
+        <tr>
+          <td>errmsg</td>
+          <td>报错信息</td>
+          <td>string</td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">POST /api/FaceRecognition/Comment</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>comparisonId</td>
+          <td>每个用户所生成的Id</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>userName</td>
+          <td>用户的昵称</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>userImageUrl</td>
+          <td>用户头像</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>comment</td>
+          <td>用户发送信息</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>hasAttachment</td>
+          <td>后台返回值？？？</td>
+          <td>true</td>
+        </tr>
+        <tr>
+          <td>commentImageUrl</td>
+          <td>用户发送图片</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>commentDate</td>
+          <td>发送时间</td>
+          <td>number</td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">GET /api/FaceRecognition/Comments</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>comparisonId</td>
+          <td>每个用户所生成的Id</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>take</td>
+          <td>排行榜显示数量</td>
+          <td>number</td>
+        </tr>
+        <tr>
+          <td>skip</td>
+          <td>排行榜暂存数量</td>
+          <td>0</td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">GET /api/FaceRecognition/Comparison</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>comparisonId</td>
+          <td>每个用户所生成的Id</td>
+          <td>string</td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">GET /api/FaceRecognition/ComparisonList</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>take</td>
+          <td>排行榜显示数量</td>
+          <td>number</td>
+        </tr>
+        <tr>
+          <td>skip</td>
+          <td>排行榜暂存数量</td>
+          <td>0</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+  </nz-card>

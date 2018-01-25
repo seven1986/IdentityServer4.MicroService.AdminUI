@@ -1,0 +1,354 @@
+<!--<button nz-button [nzType]="'primary'">测试按钮</button>
+<nz-table [nzDataSource]="dataSource"></nz-table>-->
+<!--1.UserPlat
+pId（用户平台id，包括App，指纹，微信，微博等等）
+pname（平台名称）
+2.UserInfo
+pid（参照UserPlat的pid）
+userid（对应pid的，appuserid,openid,指纹id和其他第三方的userid）
+score（用户最高得分）
+3.Score
+id（自增）
+pid,uid（参照上方定义）
+value（得分）
+datetime（提交分数时的时间戳）
+4.GameOptions
+id（游戏id，自增长）
+title,keywords,description,url,icon
+appkey（对应极秀环境明星的appkey）
+rankrefresh（表示刷新间隔，用0,1,7,30,365分别表示不刷新，按日，按周，按月，按年刷新）
+shareTitle，shareDesc，shareLink，shareImgUrl（自定义分享的标题，描述，链接，图片链接，可以不同于网页的配置）
+downloadUrl（应用宝下载链接）
+5.ImageOptions
+mooncake1，mooncake2，mooncake3，mooncake4，mooncake5，mooncake6（月饼1-6），egg（彩蛋），indexfigure（首页人物图像），readybg（首页背景图），playbg（游戏页背景图），rank（排行榜图片），start（开始按钮图片），title（标题图片），face（默认头像图片）
+每个图片配置项包含如下字段
+gameid（对应gameoptions里的id）
+imgurl（图片路径，上传后生成的）
+text（图片文字描述(只读)）
+pixel（建议像素分辨率，类似800*600这样，用于给图片维护时的提示(只读)）
+5.AudioOptions
+bgmusic（背景音乐）
+每个声音文件配置项包含如下字段
+gameid（对应gameoptions里的id）
+audurl（声音文件路径，上传后生成的）
+text（声音文件描述，用途，出现时机(只读)）
+6.Rank
+pid,uid
+sid（对应score表的id）
+rank（排名第几）
+faceimg（头像路径）
+nickname（昵称）-->
+
+<pro-header [title]="'消消乐'">
+  <ng-template #action>
+    <ng-container *ngIf="selectedRows.length > 0">
+      <button nz-button [nzSize]="'large'">批量操作</button>
+      <nz-dropdown [nzPlacement]="'bottomLeft'">
+        <button nz-button nz-dropdown [nzSize]="'large'">
+          更多操作 <i class="anticon anticon-down"></i>
+        </button>
+        <ul nz-menu>
+          <li nz-menu-item (click)="remove()">删除</li>
+          <li nz-menu-item (click)="approval()">批量审批</li>
+        </ul>
+      </nz-dropdown>
+      &nbsp;
+    </ng-container>
+
+    <button nz-button routerLink="detail/0" [nzType]="'primary'" [nzSize]="'large'">
+      <i class="anticon anticon-plus"></i><span>创建</span>
+    </button>
+
+    <nz-dropdown>
+      <button nz-button nz-dropdown [nzType]="'primary'" [nzSize]="'large'">
+        <span>导出</span> <i class="anticon anticon-down"></i>
+      </button>
+      <ul nz-menu>
+        <li nz-menu-item>Excel</li>
+        <li nz-menu-item>JSON</li>
+        <li nz-menu-item>PNG</li>
+      </ul>
+    </nz-dropdown>
+  </ng-template>
+</pro-header>
+<nz-card [nzBordered]="false">
+  <section class="table-list">
+    <div class="table-container">
+      <h3 class="table-name">UserPlat</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>平台id</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>pname</td>
+          <td>平台名称</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">UserInfo</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>pid</td>
+          <td>外键关联UserPlat的id</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>uid</td>
+          <td>对应平台的userid，例如appuserid,openid,指纹id和其他第三方的userid</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>nickname</td>
+          <td>昵称</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>headimgurl</td>
+          <td>头像</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>sex</td>
+          <td>性别（0未知，1男，2女）</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">GameModel</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>主键自增</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>游戏原型标题</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>description</td>
+          <td>游戏原型描述（游戏所需的元素，注意事项等）</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>model</td>
+          <td>游戏需满足的配置项json字符串形式存储</td>
+          <td></td>
+        </tr>
+      </table>
+      <pre class="game-model">消消乐游戏在GameModel表中的model字段如下：
+{{dataSource|json}}</pre>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">GameEntity</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>主键自增</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>gid</td>
+          <td>外键关联GameModel的id（一个游戏原型可以创建多个游戏实例）</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>title</td>
+          <td>游戏SEO之标题</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>keywords</td>
+          <td>游戏SEO之keywords</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>description</td>
+          <td>游戏SEO之description</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>name</td>
+          <td>游戏名称</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>linkurl</td>
+          <td>游戏链接（根据游戏名称生成，只读）</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>iconurl</td>
+          <td>游戏icon图标链接</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">ImageOptions</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>主键自增</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>geid</td>
+          <td>外键关联GameEntity的id</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>imgurl</td>
+          <td>图片路径，上传后生成的</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>description</td>
+          <td>图片描述（做什么，用在什么地方）</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>pixel</td>
+          <td>建议像素分辨率（类似800*600，用于给图片维护时的提示）</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">AudioOptions</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>主键自增</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>geid</td>
+          <td>外键关联GameEntity的id</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>audurl</td>
+          <td>声音文件路径，上传后生成的</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>description</td>
+          <td>声音文件描述（用途，出现时机）</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">Score</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>主键自增</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>pid</td>
+          <td>外键关联UserPlat的id</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>uid</td>
+          <td>对应平台的userid，例如appuserid,openid,指纹id和其他第三方的userid</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>geid</td>
+          <td>对应GameEntity的id</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>value</td>
+          <td>得分</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>datetime</td>
+          <td>提交分数时的时间戳</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">Rank</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>id</td>
+          <td>主键自增</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>sid</td>
+          <td>外键关联Score的id</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>ranking</td>
+          <td>排名</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>headimgurl</td>
+          <td>用户头像（可通过sid中找到Score中标识的用户查找显示，这里作为冗余字段）</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>nickname</td>
+          <td>用户昵称（可通过sid中找到Score中标识的用户查找显示，这里作为冗余字段）</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </section>
+ </nz-card>

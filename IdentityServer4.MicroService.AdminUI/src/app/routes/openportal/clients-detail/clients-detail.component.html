@@ -1,0 +1,643 @@
+<div class="content__title">
+  <h1>
+    应用详情
+  </h1>
+</div>
+
+
+<nz-card [nzBordered]="false">
+  <nz-spin [nzSpinning]="_loading">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="AddOrUpdate()">
+      <div nz-row>
+        <div nz-col [nzSpan]="10">
+          <h1 id="client_Basics">Basics</h1>
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="enabled">
+                <span>enabled</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="clientId" nz-form-item-required>clientId</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('clientId')">
+              <nz-input [nzSize]="'large'" formControlName="clientId" [nzId]="'clientId'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('clientId').dirty&&getFormControl('clientId').hasError('clientId')">The input is not valid clientId!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="requireClientSecret" nz-form-item-required>requireClientSecret</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('requireClientSecret')">
+              <nz-input [nzSize]="'large'" formControlName="requireClientSecret" [nzId]="'requireClientSecret'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('requireClientSecret').dirty&&getFormControl('requireClientSecret').hasError('requireClientSecret')">The input is not valid requireClientSecret!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="allowedGrantTypes" nz-form-item-required>allowedGrantTypes</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+              <nz-select formControlName="allowedGrantTypes" [nzSize]="'large'">
+                <nz-option *ngFor="let x of allowedGrantTypes"
+                           [nzLabel]="x.label"
+                           [nzValue]="x.grantType">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="requirePkce">
+                <span>requirePkce</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="allowPlainTextPkce">
+                <span>allowPlainTextPkce</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="allowOfflineAccess">
+                <span>allowOfflineAccess</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="allowAccessTokensViaBrowser">
+                <span>allowAccessTokensViaBrowser</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">
+                Client Secrets
+              </h3>
+              <div class="ant-card-extra">
+                <a (click)="addClientSecrets()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="clientSecrets">
+                <div *ngFor="let x of clientSecrets.controls; let i=index"
+                     [formGroupName]="i" class="cardItem">
+                  <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="3">
+                      <label>Type</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="6">
+                      <nz-input class="form-control" formControlName="type">
+                      </nz-input>
+                    </div>
+
+                    <div nz-form-label nz-col [nzSpan]="3">
+                      <label>Value</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12">
+                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="value">
+                      </nz-input>
+                    </div>
+                  </div>
+
+                  <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="3">
+                      <label>expiration</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="6">
+                      <nz-input class="form-control" formControlName="expiration">
+                      </nz-input>
+                    </div>
+
+                    <div nz-form-label nz-col [nzSpan]="3">
+                      <label>description</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12">
+                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="description">
+                      </nz-input>
+                      <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delClientSecrets(i,$event)"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">
+                RedirectUris
+              </h3>
+              <div class="ant-card-extra">
+                <a (click)="addRedirectUris()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="redirectUris">
+                <div *ngFor="let x of redirectUris.controls; let i=index"
+                     [formGroupName]="i">
+                  <div nz-form-control nz-col [nzSpan]="12" class="mgbtm15">
+                    <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="redirectUri">
+                    </nz-input>
+                    <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delRedirectUris(i,$event)"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">Allowed Scopes</h3>
+              <div class="ant-card-extra">
+                <a (click)="addAllowedScopes()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="allowedScopes">
+                <div *ngFor="let x of allowedScopes.controls; let i=index"
+                     [formGroupName]="i">
+                  <div nz-form-control nz-col [nzSpan]="12" class="mgbtm15">
+                    <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="scope">
+                    </nz-input>
+                    <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delAllowedScopes(i,$event)"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">Properties</h3>
+              <div class="ant-card-extra">
+                <a (click)="addProperties()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="properties">
+                <div *ngFor="let x of properties.controls; let i=index"
+                     [formGroupName]="i">
+                  <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="3">
+                      <label>Key</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="6">
+                      <nz-input class="form-control" formControlName="key">
+                      </nz-input>
+                    </div>
+
+                    <div nz-form-label nz-col [nzSpan]="3">
+                      <label>Value</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12">
+                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="value">
+                      </nz-input>
+                      <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delProperties(i,$event)"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <h1 id="client_AuthenticationLogout">Authentication/Logout</h1>
+
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">PostLogout RedirectUris</h3>
+              <div class="ant-card-extra">
+                <a (click)="addPostLogoutRedirectUris()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="postLogoutRedirectUris">
+                <div *ngFor="let x of postLogoutRedirectUris.controls; let i=index"
+                     [formGroupName]="i">
+                  <div nz-form-control nz-col [nzSpan]="12" class="mgbtm15">
+                    <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="postLogoutRedirectUri">
+                    </nz-input>
+                    <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delPostLogoutRedirectUris(i,$event)"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="frontChannelLogoutUri" nz-form-item-required>frontChannelLogoutUri</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('frontChannelLogoutUri')">
+              <nz-input [nzSize]="'large'" formControlName="frontChannelLogoutUri" [nzId]="'frontChannelLogoutUri'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('frontChannelLogoutUri').dirty&&getFormControl('frontChannelLogoutUri').hasError('frontChannelLogoutUri')">The input is not valid frontChannelLogoutUri!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="frontChannelLogoutSessionRequired">
+                <span>frontChannelLogoutSessionRequired</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="backChannelLogoutUri" nz-form-item-required>backChannelLogoutUri</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('backChannelLogoutUri')">
+              <nz-input [nzSize]="'large'" formControlName="backChannelLogoutUri" [nzId]="'backChannelLogoutUri'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('backChannelLogoutUri').dirty&&getFormControl('backChannelLogoutUri').hasError('backChannelLogoutUri')">The input is not valid backChannelLogoutUri!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="backChannelLogoutSessionRequired">
+                <span>backChannelLogoutSessionRequired</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="enableLocalLogin">
+                <span>enableLocalLogin</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">IdentityProvider Restrictions</h3>
+              <div class="ant-card-extra">
+                <a (click)="addIdentityProviderRestrictions()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="identityProviderRestrictions">
+                <div *ngFor="let x of identityProviderRestrictions.controls; let i=index"
+                     [formGroupName]="i">
+                  <div nz-form-control nz-col [nzSpan]="12" class="mgbtm15">
+                    <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="provider">
+                    </nz-input>
+                    <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delIdentityProviderRestrictions(i,$event)"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div nz-col [nzSpan]="2"></div>
+        <div nz-col [nzSpan]="10">
+          <h1 id="client_token">Token</h1>
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="8" [nzXs]="24">
+              <label for="identityTokenLifetime" nz-form-item-required>identityTokenLifetime</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('identityTokenLifetime')">
+              <nz-input-number [nzSize]="'large'" [nzMax]="31536000" [nzMin]="60" formControlName="identityTokenLifetime"></nz-input-number>
+              <div nz-form-explain *ngIf="getFormControl('identityTokenLifetime').dirty&&getFormControl('identityTokenLifetime').hasError('identityTokenLifetime')">The input is not valid frontChannelLogoutUri!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="8" [nzXs]="24">
+              <label for="accessTokenLifetime" nz-form-item-required>accessTokenLifetime</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('accessTokenLifetime')">
+              <nz-input-number [nzSize]="'large'" [nzMax]="31536000" [nzMin]="60" formControlName="accessTokenLifetime"></nz-input-number>
+              <div nz-form-explain *ngIf="getFormControl('accessTokenLifetime').dirty&&getFormControl('accessTokenLifetime').hasError('accessTokenLifetime')">The input is not valid frontChannelLogoutUri!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="8" [nzXs]="24">
+              <label for="authorizationCodeLifetime" nz-form-item-required>authorizationCodeLifetime</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('authorizationCodeLifetime')">
+              <nz-input-number [nzSize]="'large'" [nzMax]="31536000" [nzMin]="60" formControlName="authorizationCodeLifetime"></nz-input-number>
+              <div nz-form-explain *ngIf="getFormControl('authorizationCodeLifetime').dirty&&getFormControl('authorizationCodeLifetime').hasError('authorizationCodeLifetime')">The input is not valid frontChannelLogoutUri!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="8" [nzXs]="24">
+              <label for="absoluteRefreshTokenLifetime" nz-form-item-required>absoluteRefreshTokenLifetime</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('absoluteRefreshTokenLifetime')">
+              <nz-input-number [nzSize]="'large'" [nzMax]="31536000" [nzMin]="60" formControlName="absoluteRefreshTokenLifetime"></nz-input-number>
+              <div nz-form-explain *ngIf="getFormControl('absoluteRefreshTokenLifetime').dirty&&getFormControl('absoluteRefreshTokenLifetime').hasError('absoluteRefreshTokenLifetime')">The input is not valid frontChannelLogoutUri!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="8" [nzXs]="24">
+              <label for="slidingRefreshTokenLifetime" nz-form-item-required>slidingRefreshTokenLifetime</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('slidingRefreshTokenLifetime')">
+              <nz-input-number [nzSize]="'large'" [nzMax]="31536000" [nzMin]="60" formControlName="slidingRefreshTokenLifetime"></nz-input-number>
+              <div nz-form-explain *ngIf="getFormControl('slidingRefreshTokenLifetime').dirty&&getFormControl('slidingRefreshTokenLifetime').hasError('slidingRefreshTokenLifetime')">The input is not valid frontChannelLogoutUri!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="8" [nzXs]="24">
+              <label for="refreshTokenUsage" nz-form-item-required>refreshTokenUsage</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+              <nz-select formControlName="refreshTokenUsage" [nzSize]="'large'">
+                <nz-option *ngFor="let x of tokenUsage"
+                           [nzLabel]="x.name"
+                           [nzValue]="x.id">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="8" [nzXs]="24">
+              <label for="refreshTokenExpiration" nz-form-item-required>refreshTokenExpiration</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+              <nz-select formControlName="refreshTokenExpiration" [nzSize]="'large'">
+                <nz-option *ngFor="let x of tokenExpiration"
+                           [nzLabel]="x.name"
+                           [nzValue]="x.id">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="updateAccessTokenClaimsOnRefresh">
+                <span>updateAccessTokenClaimsOnRefresh</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="8" [nzXs]="24">
+              <label for="accessTokenType" nz-form-item-required>accessTokenType</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+              <nz-select formControlName="accessTokenType" [nzSize]="'large'">
+                <nz-option *ngFor="let x of accessTokenType"
+                           [nzLabel]="x.name"
+                           [nzValue]="x.id">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="includeJwtId">
+                <span>includeJwtId</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">Allowed CorsOrigins</h3>
+              <div class="ant-card-extra">
+                <a (click)="addAllowedCorsOrigins()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="allowedCorsOrigins">
+                <div *ngFor="let x of allowedCorsOrigins.controls; let i=index"
+                     [formGroupName]="i">
+                  <div nz-form-control nz-col [nzSpan]="12" class="mgbtm15">
+                    <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="origin">
+                    </nz-input>
+                    <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delAllowedCorsOrigins(i,$event)"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">Claims</h3>
+              <div class="ant-card-extra">
+                <a (click)="addClaim()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="claims">
+                <div *ngFor="let x of claims.controls; let i=index"
+                     [formGroupName]="i">
+                  <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSpan]="3">
+                      <label>Type</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="6">
+                      <nz-input class="form-control" formControlName="claimType">
+                      </nz-input>
+                    </div>
+
+                    <div nz-form-label nz-col [nzSpan]="3">
+                      <label>Value</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSpan]="12">
+                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="claimValue">
+                      </nz-input>
+                      <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delClaim(i,$event)"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br />
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="alwaysSendClientClaims">
+                <span>alwaysSendClientClaims</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="alwaysIncludeUserClaimsInIdToken">
+                <span>alwaysIncludeUserClaimsInIdToken</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="clientClaimsPrefix" nz-form-item-required>clientClaimsPrefix</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('clientClaimsPrefix')">
+              <nz-input [nzSize]="'large'" formControlName="clientClaimsPrefix" [nzId]="'clientClaimsPrefix'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('clientClaimsPrefix').dirty&&getFormControl('clientClaimsPrefix').hasError('clientClaimsPrefix')">The input is not valid clientClaimsPrefix!</div>
+            </div>
+          </div>
+
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="pairWiseSubjectSalt" nz-form-item-required>pairWiseSubjectSalt</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('pairWiseSubjectSalt')">
+              <nz-input [nzSize]="'large'" formControlName="pairWiseSubjectSalt" [nzId]="'pairWiseSubjectSalt'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('pairWiseSubjectSalt').dirty&&getFormControl('pairWiseSubjectSalt').hasError('pairWiseSubjectSalt')">The input is not valid pairWiseSubjectSalt!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="protocolType" nz-form-item-required>protocolType</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+              <nz-select formControlName="protocolType" [nzSize]="'large'">
+                <nz-option *ngFor="let x of protocolTypes"
+                           [nzLabel]="x.name"
+                           [nzValue]="x.id">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <h1 id="client_ConsentScreen">Consent Screen</h1>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="requireConsent">
+                <span>requireConsent</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="allowRememberConsent">
+                <span>allowRememberConsent</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="consentLifetime" nz-form-item-required>consentLifetime</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('consentLifetime')">
+              <nz-input [nzSize]="'large'" formControlName="consentLifetime" [nzId]="'consentLifetime'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('consentLifetime').dirty&&getFormControl('consentLifetime').hasError('consentLifetime')">The input is not valid consentLifetime!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="clientName" nz-form-item-required>clientName</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('clientName')">
+              <nz-input [nzSize]="'large'" formControlName="clientName" [nzId]="'clientName'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('clientName').dirty&&getFormControl('clientName').hasError('clientName')">The input is not valid clientId!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="clientUri" nz-form-item-required>clientUri</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('clientUri')">
+              <nz-input [nzSize]="'large'" formControlName="clientUri" [nzId]="'clientUri'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('clientUri').dirty&&getFormControl('clientUri').hasError('clientUri')">The input is not valid clientUri!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="logoUri" nz-form-item-required>logoUri</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('logoUri')">
+              <img width="100px" [src]="getFormControl('logoUri').value" />
+              <input type="hidden" formControlName="logoUri" />
+              <input type="file" nz-button uploader (success)="uploadSuccess($event)" accept=".jpg,.png,.jpeg">
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="description" nz-form-item-required>description</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('description')">
+              <nz-input [nzSize]="'large'" formControlName="description" [nzId]="'description'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('description').dirty&&getFormControl('description').hasError('description')">The input is not valid description!</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+        <footer-toolbar fixed-btns>
+          <error-collect></error-collect>
+          <button nz-button [nzSize]="'large'" [nzType]="'primary'">{{id>0?'更新':'创建'}}</button>
+          <button nz-button [nzSize]="'large'" routerLink="../../">返回</button>
+        </footer-toolbar>
+
+</form>
+  </nz-spin>
+ </nz-card>

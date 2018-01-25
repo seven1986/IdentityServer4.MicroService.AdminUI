@@ -1,0 +1,117 @@
+<pro-header [title]="'身份'">
+  <ng-template #breadcrumb>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item><a [routerLink]="['/']">首页</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>开放平台</nz-breadcrumb-item>
+      <nz-breadcrumb-item>资源</nz-breadcrumb-item>
+      <nz-breadcrumb-item><a [routerLink]="['/openportal/identityresources']">身份</a></nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-template>
+</pro-header>
+
+<nz-card [nzBordered]="false">
+  <nz-spin [nzSpinning]="_loading">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="AddOrUpdate()">
+      <div nz-row>
+        <div nz-col [nzSpan]="12">
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="name" nz-form-item-required>name</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('name')">
+              <nz-input [nzSize]="'large'" formControlName="name" [nzId]="'name'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('name')">The input is not valid name!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="displayName" nz-form-item-required>
+                <span>
+                  displayName
+                  <nz-tooltip [nzTitle]="'What do you want other to call you'">
+                    <i nz-tooltip class="anticon anticon-question-circle-o"></i>
+                  </nz-tooltip>
+                </span>
+              </label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('displayName')">
+              <nz-input [nzSize]="'large'" formControlName="displayName" [nzId]="'displayName'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('displayName').dirty&&getFormControl('displayName').hasError('required')">Please input your displayName!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="enabled">
+                <span>enabled</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="required">
+                <span>required</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="emphasize">
+                <span>emphasize</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="showInDiscoveryDocument">
+                <span>showInDiscoveryDocument</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="12">
+
+          <div class="ant-card-bordered ant-card">
+            <div class="ant-card-head">
+              <h3 class="ant-card-head-title">Claims</h3>
+              <div class="ant-card-extra">
+                <a (click)="addClaim()">
+                  <i class="anticon anticon-plus"></i>
+                  添加
+                </a>
+              </div>
+            </div>
+            <div class="ant-card-body">
+              <div formArrayName="userClaims">
+                <div *ngFor="let x of userClaims.controls; let i=index"
+                     [formGroupName]="i">
+                  <div nz-form-item nz-row>
+                    <div nz-form-control nz-col>
+                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="type">
+                      </nz-input>
+                      <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delClaim(i,$event)"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <footer-toolbar fixed-btns>
+        <error-collect></error-collect>
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'">{{id>0?'更新':'创建'}}</button>
+        <button nz-button [nzSize]="'large'" routerLink="../../">返回</button>
+      </footer-toolbar>
+
+    </form>
+  </nz-spin>
+</nz-card>

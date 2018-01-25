@@ -1,0 +1,377 @@
+<pro-header [title]="'用户资料'">
+  <ng-template #breadcrumb>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item><a [routerLink]="['/']">首页</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>开放平台</nz-breadcrumb-item>
+      <nz-breadcrumb-item><a [routerLink]="['/openportal/users']">用户</a></nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-template>
+</pro-header>
+
+<nz-card [nzBordered]="false">
+  <nz-spin [nzSpinning]="_loading">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="AddOrUpdate()">
+      <div nz-row>
+        <div nz-col [nzSpan]="12">
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="avatar" nz-form-item-required>avatar</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('avatar')">
+              <img width="100px" [src]="getFormControl('avatar').value" />
+              <input type="hidden" formControlName="avatar" />
+              <input type="file" nz-button uploader (success)="uploadSuccess($event)" accept=".jpg,.png,.jpeg">
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="email" nz-form-item-required>E-mail</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('email')">
+              <nz-input [nzSize]="'large'" formControlName="email" [nzId]="'email'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('email').dirty&&getFormControl('email').hasError('email')">The input is not valid E-mail!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="logins">logins</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" formArrayName="logins">
+              <nz-tag *ngFor="let x of logins.controls">
+                {{x.value.providerDisplayName}}
+              </nz-tag>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="passwordHash" nz-form-item-required>passwordHash</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('passwordHash')">
+              <nz-input [nzSize]="'large'" formControlName="passwordHash" [nzId]="'passwordHash'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('passwordHash').dirty&&getFormControl('passwordHash').hasError('required')">Please input your password!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="userName" nz-form-item-required>
+                <span>
+                  userName
+                  <nz-tooltip [nzTitle]="'What do you want other to call you'">
+                    <i nz-tooltip class="anticon anticon-question-circle-o"></i>
+                  </nz-tooltip>
+                </span>
+              </label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('userName')">
+              <nz-input [nzSize]="'large'" formControlName="userName" [nzId]="'userName'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('userName').dirty&&getFormControl('userName').hasError('required')">Please input your userName!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="phoneNumber" nz-form-item-required>Phone Number</label>
+            </div>
+            <div nz-form-control nz-col
+                 [nzSm]="14" [nzXs]="24"
+                 nzHasFeedback
+                 [nzValidateStatus]="getFormControl('phoneNumber')">
+              <nz-input-group [nzSize]="'large'" [nzCompact]="true">
+                <nz-select formControlName="phoneNumberPrefix" style="width: 45%;">
+                  <nz-option *ngFor="let x of countryCodes | keys"
+                             [nzLabel]="'+'+x+' ('+countryCodes[x]+')'"
+                             [nzValue]="x">
+                  </nz-option>
+                </nz-select>
+                <input formControlName="phoneNumber" id="'phoneNumber'" nz-input style="width: 55%;">
+              </nz-input-group>
+              <div nz-form-explain *ngIf="getFormControl('phoneNumber').dirty&&getFormControl('phoneNumber').hasError('required')">Please input your phone number!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="normalizedUserName" nz-form-item-required>normalizedUserName</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('normalizedUserName')">
+              <nz-input [nzSize]="'large'" formControlName="normalizedUserName" [nzId]="'normalizedUserName'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('normalizedUserName').dirty&&getFormControl('normalizedUserName').hasError('required')">Please input normalizedUserName!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="parentUserID" nz-form-item-required>parentUserID</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('parentUserID')">
+              <nz-input [nzSize]="'large'" formControlName="parentUserID" [nzId]="'parentUserID'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('parentUserID').dirty&&getFormControl('parentUserID').hasError('required')">Please input parentUserID!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="isDeleted">
+                <span>isDeleted</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="emailConfirmed">
+                <span>emailConfirmed</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="phoneNumberConfirmed">
+                <span>phoneNumberConfirmed</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="twoFactorEnabled">
+                <span>twoFactorEnabled</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label>lockoutEnd</label>
+            </div>
+            <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="getFormControl('lockoutEnd')">
+              <nz-datepicker formControlName="lockoutEnd" [nzSize]="'large'" style="width: 100%;"></nz-datepicker>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row style="margin-bottom:8px;">
+            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+              <label nz-checkbox formControlName="lockoutEnabled">
+                <span>lockoutEnabled</span>
+              </label>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="lineageIDs" nz-form-item-required>lineageIDs</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('lineageIDs')">
+              <nz-input [nzSize]="'large'" formControlName="lineageIDs" [nzId]="'lineageIDs'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('lineageIDs').dirty&&getFormControl('lineageIDs').hasError('required')">Please input lineageIDs!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="lineage" nz-form-item-required>lineage</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('lineage')">
+              <nz-input [nzSize]="'large'" formControlName="lineage" [nzId]="'lineage'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('lineage').dirty&&getFormControl('lineage').hasError('required')">Please input lineage!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="normalizedEmail" nz-form-item-required>normalizedEmail</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('normalizedEmail')">
+              <nz-input [nzSize]="'large'" formControlName="normalizedEmail" [nzId]="'normalizedEmail'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('normalizedEmail').dirty&&getFormControl('normalizedEmail').hasError('required')">Please input normalizedEmail!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="nickName" nz-form-item-required>nickName</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('nickName')">
+              <nz-input [nzSize]="'large'" formControlName="nickName" [nzId]="'nickName'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('nickName').dirty&&getFormControl('nickName').hasError('required')">Please input nickName!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="gender" nz-form-item-required>gender</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('gender')">
+              <nz-input [nzSize]="'large'" formControlName="gender" [nzId]="'gender'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('gender').dirty&&getFormControl('gender').hasError('required')">Please input gender!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="address" nz-form-item-required>address</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('address')">
+              <nz-input [nzSize]="'large'" formControlName="address" [nzId]="'address'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('address').dirty&&getFormControl('address').hasError('required')">Please input address!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="birthday" nz-form-item-required>birthday</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('birthday')">
+              <nz-input [nzSize]="'large'" formControlName="birthday" [nzId]="'birthday'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('birthday').dirty&&getFormControl('birthday').hasError('required')">Please input birthday!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="stature" nz-form-item-required>stature</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('stature')">
+              <nz-input [nzSize]="'large'" formControlName="stature" [nzId]="'stature'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('stature').dirty&&getFormControl('stature').hasError('required')">Please input stature!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="weight" nz-form-item-required>weight</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('weight')">
+              <nz-input [nzSize]="'large'" formControlName="weight" [nzId]="'weight'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('weight').dirty&&getFormControl('weight').hasError('required')">Please input weight!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="description" nz-form-item-required>description</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('description')">
+              <nz-input [nzSize]="'large'" formControlName="description" [nzId]="'description'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('description').dirty&&getFormControl('description').hasError('required')">Please input description!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="createDate" nz-form-item-required>createDate</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('createDate')">
+              <nz-input [nzSize]="'large'" formControlName="createDate" [nzId]="'createDate'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('createDate').dirty&&getFormControl('createDate').hasError('required')">Please input createDate!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="lastUpdateTime" nz-form-item-required>lastUpdateTime</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('lastUpdateTime')">
+              <nz-input [nzSize]="'large'" formControlName="lastUpdateTime" [nzId]="'lastUpdateTime'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('lastUpdateTime').dirty&&getFormControl('lastUpdateTime').hasError('required')">Please input lastUpdateTime!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="securityStamp" nz-form-item-required>securityStamp</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('securityStamp')">
+              <nz-input [nzSize]="'large'" formControlName="securityStamp" [nzId]="'securityStamp'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('securityStamp').dirty&&getFormControl('securityStamp').hasError('required')">Please input securityStamp!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="concurrencyStamp" nz-form-item-required>concurrencyStamp</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('concurrencyStamp')">
+              <nz-input [nzSize]="'large'" formControlName="concurrencyStamp" [nzId]="'concurrencyStamp'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('concurrencyStamp').dirty&&getFormControl('concurrencyStamp').hasError('required')">Please input concurrencyStamp!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="accessFailedCount" nz-form-item-required>accessFailedCount</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('accessFailedCount')">
+              <nz-input [nzSize]="'large'" formControlName="accessFailedCount" [nzId]="'accessFailedCount'"></nz-input>
+              <div nz-form-explain *ngIf="getFormControl('accessFailedCount').dirty&&getFormControl('accessFailedCount').hasError('required')">Please input accessFailedCount!</div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label for="roles" nz-form-item-required>roles</label>
+            </div>
+            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24">
+              <nz-select formControlName="roles" [nzSize]="'large'" [nzMode]="'multiple'">
+                <nz-option *ngFor="let x of roles.data"
+                           [nzLabel]="x.normalizedName"
+                           [nzValue]="x.id">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+        </div>
+
+        <div nz-col [nzSpan]="12">
+          <h4>Claims</h4>
+          <div formArrayName="claims">
+            <div *ngFor="let x of claims.controls; let i=index"
+                 [formGroupName]="i">
+              <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="3">
+                  <label>Type</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="4">
+                  <nz-input class="form-control" formControlName="claimType">
+                  </nz-input>
+                </div>
+
+                <div nz-form-label nz-col [nzSpan]="3">
+                  <label>Value</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="12">
+                  <nz-input style="width: 60%; margin-right:8px;" class="form-control" formControlName="claimValue">
+                  </nz-input>
+                  <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delClaim(i,$event)"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div nz-form-item nz-row>
+            <div nz-form-control nz-col [nzSpan]="20" [nzOffset]="3">
+              <a nz-button style="width:70%;line-height:2" (click)="addClaim()">
+                <i class="anticon anticon-plus"></i>
+                添加
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <footer-toolbar fixed-btns>
+        <error-collect></error-collect>
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'">{{id>0?'更新':'创建'}}</button>
+        <button nz-button [nzSize]="'large'" routerLink="../../">返回</button>
+      </footer-toolbar>
+
+    </form>
+  </nz-spin>
+</nz-card>

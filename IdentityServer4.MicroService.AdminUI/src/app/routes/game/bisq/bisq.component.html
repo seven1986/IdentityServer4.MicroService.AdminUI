@@ -1,0 +1,263 @@
+<pro-header [title]="'BI 神器'">
+  <ng-template #action>
+    <ng-container *ngIf="selectedRows.length > 0">
+      <button nz-button [nzSize]="'large'">批量操作</button>
+      <nz-dropdown [nzPlacement]="'bottomLeft'">
+        <button nz-button nz-dropdown [nzSize]="'large'">
+          更多操作 <i class="anticon anticon-down"></i>
+        </button>
+        <ul nz-menu>
+          <li nz-menu-item (click)="remove()">删除</li>
+          <li nz-menu-item (click)="approval()">批量审批</li>
+        </ul>
+      </nz-dropdown>
+      &nbsp;
+    </ng-container>
+
+    <button nz-button routerLink="detail/0" [nzType]="'primary'" [nzSize]="'large'">
+      <i class="anticon anticon-plus"></i><span>创建</span>
+    </button>
+
+    <nz-dropdown>
+      <button nz-button nz-dropdown [nzType]="'primary'" [nzSize]="'large'">
+        <span>导出</span> <i class="anticon anticon-down"></i>
+      </button>
+      <ul nz-menu>
+        <li nz-menu-item>Excel</li>
+        <li nz-menu-item>JSON</li>
+        <li nz-menu-item>PNG</li>
+      </ul>
+    </nz-dropdown>
+  </ng-template>
+</pro-header>
+<nz-card [nzBordered]="false">
+  <section class="flexbox bisqList">
+    <div class="list" *ngFor="let data of App?.dataArray" routerLink="bisqlist/{{data.appId}}">
+      <img src="{{data.appIconUrl}}" />
+      <p>{{data.appName}}</p>
+    </div>
+  </section>
+</nz-card>
+
+  <!--<div nz-row [nzGutter]="40">
+    <div nz-col [nzSpan]="2">
+      <button nz-button nzType="primary" [nzSize]="'large'" routerLink="detail/0">创建用户</button>
+    </div>
+
+  </div>
+  <br/>
+  <nz-spin [nzSpinning]="_loading">
+    <nz-table #nzTable [nzDataSource]="data" [nzPageSize]="10" (nzDataChange)="_displayDataChange($event)">
+      <thead nz-thead>
+        <tr>
+          <th nz-th [nzCheckbox]="true">
+            <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
+            </label>
+          </th>
+          <th nz-th><span>活动名称</span></th>
+          <th nz-th><span>开始时间</span></th>
+          <th nz-th><span>结束时间</span></th>
+          <th nz-th><span>操作</span></th>
+        </tr>
+      </thead>
+      <tbody nz-tbody>
+        <tr nz-tbody-tr *ngFor="let data of gameinstance?.dataArray">
+          <td nz-td [nzCheckbox]="true">
+            <label nz-checkbox [nzDisabled]="data.disabled" [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)">
+            </label>
+          </td>
+          <td nz-td>
+            <a>{{data.instanceName}}</a>
+          </td>
+          <td nz-td>{{data.startDate}}</td>
+          <td nz-td>{{data.endDate}}</td>
+          <td nz-td>
+            <a routerLink="detail/{{data.instanceId}}">编辑</a>
+            <span nz-table-divider></span>
+            <nz-popconfirm [nzTitle]="'确定要删除？'" (nzOnConfirm)="confirm(data.instanceId)" (nzOnCancel)="cancel()">
+              <a nz-popconfirm>删除</a>
+            </nz-popconfirm>
+
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-spin>-->
+  <!--<nz-table #nzTable [nzDataSource]="data" [nzIsPagination]="false">
+    <thead nz-thead>
+      <tr>
+        <th nz-th><span>字段</span></th>
+        <th nz-th><span>string</span></th>
+      </tr>
+    </thead>
+    <tbody nz-tbody>
+      <tr nz-tbody-tr *ngFor="let data of nzTable.data">
+        <td nz-td>{{data.name}}</td>
+        <td nz-td>{{data.string}}</td>
+      </tr>
+    </tbody>
+  </nz-table>-->
+  <!--<section class="table-list">
+    <h3 class="table-name">活动地址:</h3>
+    http://games.ixingban.com/biglory/index.aspx?gameId=874539EE-E130-11E6-80C2-00155D454321&instanceId=2&secretId=C01E39EE-E130-11E6-80C2-00155D45A9F5&AppSecret=lgDi5Mkx4z8qlXFJjQgwfCHiIE0VVh9Y-JWVJ2cagx45CHV5kBvYuEVbghpM490qGwNaLWxX4szO0f0a_64hTg&accessToken=
+    <div class="table-container">
+      <h3 class="table-name">POST /api/General/Image</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>gameId</td>
+          <td>活动Id(链接附带固定值)</td>
+          <td>874539EE-E130-11E6-80C2-00155D454321</td>
+        </tr>
+        <tr>
+          <td>instanceId</td>
+          <td>后台返回值</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>shareUserId</td>
+          <td>用户Id(微信的openid或APP的AppUserId)</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>platForm</td>
+          <td>环境值</td>
+          <td>1(APP)2(微信)3(微博)</td>
+        </tr>
+        <tr>
+          <td>imageStringBase64</td>
+          <td>所传入的图片base64值</td>
+          <td>string</td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">GET /api/General/GameInstanceDetails</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>appId</td>
+          <td>艺人Id</td>
+          <td>C01E39EE-E130-11E6-80C2-00155D45A9F5</td>
+        </tr>
+        <tr>
+          <td>appSecret</td>
+          <td>艺人appSecret</td>
+          <td>lgDi5Mkx4z8qlXFJjQgwfCHiIE0VVh9Y-JWVJ2cagx45CHV5kBvYuEVbghpM490qGwNaLWxX4szO0f0a_64hTg</td>
+        </tr>
+        <tr>
+          <td>gameId</td>
+          <td>活动Id</td>
+          <td>874539EE-E130-11E6-80C2-00155D454321</td>
+        </tr>
+        <tr>
+          <td>instanceId</td>
+          <td>后台返回值</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>shareUserId</td>
+          <td>链接返回的shareUserId(储存上个用户信息)</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>platForm</td>
+          <td>环境值</td>
+          <td>1(APP)2(微信)3(微博)</td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">GET /api/General/Comment</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>gameId</td>
+          <td>活动Id</td>
+          <td>874539EE-E130-11E6-80C2-00155D454321</td>
+        </tr>
+        <tr>
+          <td>instanceId</td>
+          <td>后台返回值</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>shareUserId</td>
+          <td>用户Id(微信的openid或APP的AppUserId)</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>platForm</td>
+          <td>环境值</td>
+          <td>1(APP)2(微信)3(微博)</td>
+        </tr>
+        <tr>
+          <td>skip</td>
+          <td>评论暂存值</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>take</td>
+          <td>评论显示数量</td>
+          <td>number</td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-container">
+      <h3 class="table-name">POST /api/General/Comment</h3>
+      <table>
+        <tr>
+          <th>字段名</th>
+          <th>说明</th>
+          <th>默认值</th>
+        </tr>
+        <tr>
+          <td>gameId</td>
+          <td>活动Id</td>
+          <td>874539EE-E130-11E6-80C2-00155D454321</td>
+        </tr>
+        <tr>
+          <td>instanceId</td>
+          <td>后台返回值</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>shareUserId</td>
+          <td>用户Id(微信的openid或APP的AppUserId)</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>platForm</td>
+          <td>环境值</td>
+          <td>1(APP)2(微信)3(微博)</td>
+        </tr>
+        <tr>
+          <td>userName</td>
+          <td>获取用户姓名(APP或微信)</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>userImageUrl</td>
+          <td>获取用户头像(APP或微信)</td>
+          <td>string</td>
+        </tr>
+        <tr>
+          <td>comment</td>
+          <td>发送的评论信息</td>
+          <td>string</td>
+        </tr>
+      </table>
+    </div>
+  </section>-->

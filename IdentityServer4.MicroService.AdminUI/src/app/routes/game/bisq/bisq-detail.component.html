@@ -1,0 +1,141 @@
+<!--<h1 (click)="s=!s">创建用户</h1>
+<br /><br />
+<pre *ngIf="s">
+{{entity|json}}
+</pre>-->
+<button nz-button [nzSize]="'large'" routerLink="../../">返回</button>
+<h1>{{id>0?'更新':'创建用户'}}</h1>
+<br /><br />
+<nz-spin [nzSpinning]="_loading">
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="AddOrUpdate()">
+    <div nz-row>
+      <div nz-col [nzSpan]="12">
+        <!--<div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+            <label for="avatar" nz-form-item-required>avatar</label>
+          </div>
+          <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('email')">
+            <img width="100px" src="" [src]="getFormControl('avatar').value || '../../../assets/img/avatar.jpg'" />
+            <input type="hidden" formControlName="avatar" />
+            <input type="file" class="uploaderFile" nz-button uploader (success)="uploadSuccess($event)" accept=".jpg,.png,.jpeg">
+          </div>
+        </div>-->
+
+        <!--instanceName-->
+        <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+            <label for="instanceName" nz-form-item-required>
+              <span>
+                instanceName
+                <nz-tooltip [nzTitle]="'What do you want other to call you'">
+                  <i nz-tooltip class="anticon anticon-question-circle-o"></i>
+                </nz-tooltip>
+              </span>
+            </label>
+          </div>
+          <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('instanceName')">
+            <nz-input [nzSize]="'large'" formControlName="instanceName" [nzId]="'instanceName'"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('instanceName').dirty&&getFormControl('instanceName').hasError('required')">Please input your instanceName!</div>
+          </div>
+        </div>
+        <!--instanceDetails-->
+        <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+            <label for="instanceDetails" nz-form-item-required>instanceDetails</label>
+          </div>
+          <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('instanceDetails')">
+            <nz-input [nzSize]="'large'" formControlName="instanceDetails" [nzId]="'instanceDetails'"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('instanceDetails').dirty&&getFormControl('instanceDetails').hasError('required')">Please input instanceDetails!</div>
+          </div>
+        </div>
+        <!--instanceRules-->
+        <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+            <label for="instanceRules" nz-form-item-required>instanceRules</label>
+          </div>
+          <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('instanceRules')">
+            <nz-input [nzSize]="'large'" formControlName="instanceRules" [nzId]="'instanceRules'"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('instanceRules').dirty&&getFormControl('instanceRules').hasError('required')">Please input instanceRules!</div>
+          </div>
+        </div>
+        <!--instanceInstructions-->
+        <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+            <label for="instanceInstructions" nz-form-item-required>instanceInstructions</label>
+          </div>
+          <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('instanceInstructions')">
+            <nz-input [nzSize]="'large'" formControlName="instanceInstructions" [nzId]="'instanceRules'"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('instanceInstructions').dirty&&getFormControl('instanceInstructions').hasError('required')">Please input instanceInstructions!</div>
+          </div>
+        </div>
+        <!--startDate-->
+        <div nz-form-item nz-row class="flexbox">
+          <div class="cell">
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label>startDate</label>
+            </div>
+            <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="getFormControl('startDate')">
+              <nz-datepicker formControlName="startDate" [nzSize]="'large'" style="width: 100%;"></nz-datepicker>
+            </div>
+          </div>
+          <div class="cell">
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label>endDate</label>
+            </div>
+            <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="getFormControl('endDate')">
+              <nz-datepicker formControlName="endDate" [nzSize]="'large'" style="width: 100%;"></nz-datepicker>
+            </div>
+          </div>
+        </div>
+        <!--createDate-->
+        <div nz-form-item nz-row class="flexbox">
+            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+              <label>createDate</label>
+            </div>
+            <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="getFormControl('createDate')">
+              <nz-datepicker formControlName="createDate" [nzSize]="'large'" style="width: 100%;"></nz-datepicker>
+            </div>    
+        </div>
+        <!--createUser-->
+        <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+            <label for="createUser" nz-form-item-required>createUser</label>
+          </div>
+          <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('createUser')">
+            <nz-input [nzSize]="'large'" formControlName="createUser" [nzId]="'createUser'"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('createUser').dirty&&getFormControl('createUser').hasError('required')">Please input createUser!</div>
+          </div>
+        </div>
+        <!--updateDate-->
+        <div nz-form-item nz-row class="flexbox">
+          <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+            <label>updateDate</label>
+          </div>
+          <div nz-col [nzSpan]="12" nz-form-control [nzValidateStatus]="getFormControl('updateDate')">
+            <nz-datepicker formControlName="updateDate" [nzSize]="'large'" style="width: 100%;"></nz-datepicker>
+          </div>
+        </div>
+        <!--updateUser-->
+        <div nz-form-item nz-row>
+          <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
+            <label for="updateUser" nz-form-item-required>updateUser</label>
+          </div>
+          <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('updateUser')">
+            <nz-input [nzSize]="'large'" formControlName="updateUser" [nzId]="'updateUser'"></nz-input>
+            <div nz-form-explain *ngIf="getFormControl('updateUser').dirty&&getFormControl('updateUser').hasError('required')">Please input updateUser!</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div nz-form-item nz-row style="margin-bottom:8px;">
+      <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="3">
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'" (click)="submit()">{{id>0?'更新':'创建'}}</button>
+        &nbsp;
+        <button nz-button [nzSize]="'large'" routerLink="../../">返回</button>
+      </div>
+    </div>
+
+  </form>
+</nz-spin>

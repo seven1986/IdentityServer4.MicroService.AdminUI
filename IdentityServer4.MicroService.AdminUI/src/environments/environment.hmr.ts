@@ -3,9 +3,9 @@ export const environment = {
   hmr: true,
   useHash: false,
   production: false,
-  ApiServer: 'https://localhost:44347',
+  ApiServer: 'https://localhost:44309',
   IdentityServer: {
-    authority: 'https://localhost:44347',
+    authority: 'https://localhost:44309',
     client_id: 'adminportal'
   },
   ApimSubscription:

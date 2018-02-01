@@ -286,3 +286,4 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/IdentityServer4.MicroService.AdminUI/package-lock.json

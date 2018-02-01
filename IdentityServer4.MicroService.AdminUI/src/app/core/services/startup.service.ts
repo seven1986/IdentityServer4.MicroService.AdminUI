@@ -12,6 +12,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import "rxjs/add/Observable/empty";
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/operator/map';
 
 /**
  * 用于应用启动时

@@ -9,7 +9,9 @@
       "@shared": [ "app/shared" ],
       "@shared/*": [ "app/shared/*" ],
       "@core": [ "app/core/" ],
-      "@core/*": [ "app/core/*" ]
+      "@core/*": [ "app/core/*" ],
+      "@env": [ "environments/" ],
+      "@env/*": [ "environments/*" ]
     }
   },
   "exclude": [

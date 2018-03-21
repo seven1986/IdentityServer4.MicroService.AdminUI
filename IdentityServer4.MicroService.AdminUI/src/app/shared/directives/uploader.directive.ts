@@ -1,5 +1,5 @@
-import { Directive, ElementRef, HostListener, Output, EventEmitter  } from '@angular/core';
-import { CampaignCoreIdentityClient } from 'campaign.core.identity';
+import { Directive, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
+import { IdentityServerClient } from 'shingsou.identityserver';
 
 @Directive({
   selector: 'input[uploader]'
@@ -9,7 +9,7 @@ export class UploaderDirective {
   @Output() success: any = new EventEmitter();
 
   constructor(private el: ElementRef,
-    private api: CampaignCoreIdentityClient) {
+    private api: IdentityServerClient) {
   }
 
   @HostListener('change',['$event'])
@@ -24,8 +24,8 @@ export class UploaderDirective {
       let formData: FormData = new FormData();
 
       formData.append('value', file, file.name);
-
-      this.api.ImagePost(formData).subscribe(x =>
+      
+      this.api.file_image(formData).subscribe(x =>
       {
         this.success.emit(x.data);
       })

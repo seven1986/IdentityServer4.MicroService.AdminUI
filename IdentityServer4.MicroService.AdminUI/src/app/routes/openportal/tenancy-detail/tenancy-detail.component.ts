@@ -7,7 +7,7 @@ import {
   FormArray
 } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { CampaignCoreIdentityClient } from 'campaign.core.identity';
+import { IdentityServerClient } from 'shingsou.identityserver';
 import { NzMessageService } from 'ng-zorro-antd';
 
 
@@ -34,7 +34,7 @@ export class TenancyDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private api: CampaignCoreIdentityClient) {
+    private api: IdentityServerClient) {
   }
 
   ngOnInit() {
@@ -49,30 +49,76 @@ export class TenancyDetailComponent implements OnInit {
 
   initData() {
     this._loading = true;
-    this.api.TenantDetail(this.id).subscribe(r => {
+    this.api.tenant_detail(this.id).subscribe(r => {
       this._loading = false;
       this.initFormByData(r.data);
     });
   }
 
   _default_properties = [
+    //common configuration
+    'WebSite',
+    'PortalSite',
+    'AdminSite',
+    'Keywords',
+    'Summary',
+    'Description',
+    'EnterpriseEmail',
+    'Tracking',
+    'Favicon',
+
     // used for auth login
-    'Weixin:ClientId',
-    'Weixin:ClientSecret',
-    'Weibo:ClientId',
-    'Weibo:ClientSecret',
-    'GitHub:ClientId',
-    'GitHub:ClientSecret',
-    'QQ:ClientId',
-    'QQ:ClientSecret',
+    'Amazon:ClientId',
+    'Amazon:ClientSecret',
+
     'Facebook:ClientId',
     'Facebook:ClientSecret',
-    'Microsoft:ClientId',
-    'Microsoft:ClientSecret',
+
+    'GitHub:ClientId',
+    'GitHub:ClientSecret',
+
+    'Gitter:ClientId',
+    'Gitter:ClientSecret',
+
     'Google:ClientId',
     'Google:ClientSecret',
+
+    'Instagram:ClientId',
+    'Instagram:ClientSecret',
+
+    'LinkedIn:ClientId',
+    'LinkedIn:ClientSecret',
+
+    'Microsoft:ClientId',
+    'Microsoft:ClientSecret',
+
+    'Paypal:ClientId',
+    'Paypal:ClientSecret',
+
+    'QQ:ClientId',
+    'QQ:ClientSecret',
+
+    'Reddit:ClientId',
+    'Reddit:ClientSecret',
+
+    'Salesforce:ClientId',
+    'Salesforce:ClientSecret',
+
     'Twitter:ClientId',
     'Twitter:ClientSecret',
+
+    'Visual Studio Online:ClientId',
+    'Visual Studio Online:ClientSecret',
+
+    'Weibo:ClientId',
+    'Weibo:ClientSecret',
+
+    'Weixin:ClientId',
+    'Weixin:ClientSecret',
+
+    'WordPress:ClientId',
+    'WordPress:ClientSecret',
+
 
     // used for AzureApiManagement
     'Azure:ApiManagement:Host',
@@ -81,6 +127,9 @@ export class TenancyDetailComponent implements OnInit {
     'Azure:ApiManagement:AuthorizationServerId',
     'Azure:ApiManagement:ProductId',
     'Azure:ApiManagement:PortalUris',
+    'Azure:ApiManagement:DelegationKey',
+
+
   ];
 
   initForm() {
@@ -210,7 +259,7 @@ export class TenancyDetailComponent implements OnInit {
 
     let v = this.validateForm.value;
 
-    let result = this.id > 0 ? this.api.TenantPut(v) : this.api.TenantPost(v);
+    let result = this.id > 0 ? this.api.tenant_put(v) : this.api.tenant_post(v);
 
     let onOK = r => {
       this._loading = false;

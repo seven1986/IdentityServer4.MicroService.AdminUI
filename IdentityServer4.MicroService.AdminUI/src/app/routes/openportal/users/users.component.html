@@ -175,7 +175,7 @@
         </td>
         <td nz-td>{{x.createDate}}</td>
         <td nz-td>
-          <a routerLink="detail/{{x.id}}">编辑</a>
+          <a routerLink="detail/{{x.userId}}">编辑</a>
           <span nz-table-divider></span>
           <nz-popconfirm [nzTitle]="'确定要删除？'" (nzOnConfirm)="confirm(x.id)">
             <a nz-popconfirm>删除</a>

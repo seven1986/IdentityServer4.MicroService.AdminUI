@@ -2,15 +2,17 @@
 
 import { TestBed, async, TestModuleMetadata } from '@angular/core/testing';
 import { Type, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-import { CoreModule } from '@core/core.module';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { HttpLoaderFactory } from 'app/app.module';
-import { HttpClient } from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+
 import { ALAIN_I18N_TOKEN, ColorsService, SettingsService, MenuService, ScrollService, _HttpClient, ALAIN_THEME_OPTIONS } from '@delon/theme';
 import { I18NService } from '@core/i18n/i18n.service';
-import { RouterTestingModule } from '@angular/router/testing';
+import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
+import { DelonModule } from '../app/delon.module';
+import { AlainAuthModule } from '@delon/auth';
+import { HttpLoaderFactory } from '../app/app.module';
 
 const resetTestingModule = TestBed.resetTestingModule,
       preventAngularFromResetting = () => TestBed.resetTestingModule = () => TestBed;
@@ -29,7 +31,13 @@ export const setUpTestBed = (moduleDef: TestModuleMetadata) => {
         // region: imports
         if (!moduleDef.imports) moduleDef.imports = [];
         moduleDef.imports.push(RouterTestingModule);
-        moduleDef.imports.push(SharedModule.forRoot());
+        moduleDef.imports.push(HttpClientModule);
+        moduleDef.imports.push(DelonModule);
+        moduleDef.imports.push(SharedModule);
+        // auth
+        moduleDef.imports.push(AlainAuthModule.forRoot({
+            login_url: `/passport/login`
+        }));
         moduleDef.imports.push(TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

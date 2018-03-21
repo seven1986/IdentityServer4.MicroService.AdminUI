@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CampaignCoreGameClient } from 'campaign.core.game';
 import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
@@ -61,7 +60,7 @@ export class BisqListComponent implements OnInit {
         this._refreshStatus();
     };
 
-    constructor(private api: CampaignCoreGameClient, private message: NzMessageService) { }
+    constructor(private message: NzMessageService) { }
     ngOnInit() {
         this.getDate();
 
@@ -100,22 +99,22 @@ export class BisqListComponent implements OnInit {
     }
     getDate() {
         this._loading = true;
-        this.api.AdminGameInstances('874539ee-e130-11e6-80c2-00155d454321', 100).subscribe(x => {
-            this.gameinstance = x;
-            this._loading = false;
-        }).add(r => { this._loading = false; });
-        this.api.AdminGameInstance('2').subscribe(r => {
-            this._loading = false;
-            this.gameinstance = r.dataArray;
+        //this.api.AdminGameInstances('874539ee-e130-11e6-80c2-00155d454321', 100).subscribe(x => {
+        //    this.gameinstance = x;
+        //    this._loading = false;
+        //}).add(r => { this._loading = false; });
+        //this.api.AdminGameInstance('2').subscribe(r => {
+        //    this._loading = false;
+        //    this.gameinstance = r.dataArray;
             
-        });
+        //});
     }
     //删除
     confirm = (d) => {
-        this.api.AdminGameDeleteInstance(d).subscribe(x => {
-            this.message.info('click confirm');
-            this.getDate();
-        });
+        //this.api.AdminGameDeleteInstance(d).subscribe(x => {
+        //    this.message.info('click confirm');
+        //    this.getDate();
+        //});
     }
     //取消删除
     cancel = function () {

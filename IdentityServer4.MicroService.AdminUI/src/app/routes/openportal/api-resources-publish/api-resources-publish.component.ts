@@ -1,6 +1,6 @@
 import { NzModalSubject, NzMessageService } from 'ng-zorro-antd';
 import { Component, OnInit } from '@angular/core';
-import { CampaignCoreIdentityClient } from 'campaign.core.identity';
+import { IdentityServerClient } from 'shingsou.identityserver';
 
 @Component({
   selector: 'app-api-resources-publish',
@@ -47,7 +47,7 @@ export class ApiResourcesPublishComponent implements OnInit {
                </policies>`;
 
   constructor(
-    private api: CampaignCoreIdentityClient,
+    private api: IdentityServerClient,
     private subject: NzModalSubject,
     public msgSrv: NzMessageService,) { }
 
@@ -61,7 +61,7 @@ export class ApiResourcesPublishComponent implements OnInit {
 
     this.loading = true;
 
-    this.api.ApiResourcePublishSetting(this.aid).subscribe(r => { this.loading = false; if (r.data) { this.vm = r.data; }});
+    this.api.apiresource_publishsetting(this.aid).subscribe(r => { this.loading = false; if (r.data) { this.vm = r.data; }});
   }
 
   close() {
@@ -71,7 +71,7 @@ export class ApiResourcesPublishComponent implements OnInit {
   save() {
     if (this.loading == true) { return; }
     this.loading = true;
-    this.api.ApiResourcePublish(this.vm).subscribe(r => {
+    this.api.apiresource_publish(this.vm).subscribe(r => {
       this.loading = false;
       this.msgSrv.success('保存成功，只是模拟，实际未变更');
       this.subject.next('true');

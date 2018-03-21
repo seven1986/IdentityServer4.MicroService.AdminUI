@@ -7,7 +7,7 @@ import {
   FormArray
 } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { CampaignCoreIdentityClient } from 'campaign.core.identity';
+import { IdentityServerClient } from 'shingsou.identityserver';
 import { NzMessageService } from 'ng-zorro-antd';
 
 
@@ -28,7 +28,7 @@ export class ApiResourcesDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private api: CampaignCoreIdentityClient) {
+    private api: IdentityServerClient) {
   }
 
   ngOnInit() {
@@ -43,7 +43,7 @@ export class ApiResourcesDetailComponent implements OnInit {
 
   initData() {
     this._loading = true;
-    this.api.ApiResourceDetail(this.id).subscribe(r => {
+    this.api.apiresource_detail(this.id).subscribe(r => {
       this._loading = false;
       this.initFormByData(r.data);
     });
@@ -184,7 +184,7 @@ export class ApiResourcesDetailComponent implements OnInit {
 
     let v = this.validateForm.value;
 
-    let result = this.id > 0 ? this.api.ApiResourcePut(v) : this.api.ApiResourcePost(v);
+    let result = this.id > 0 ? this.api.apiresource_put(v) : this.api.apiresource_post(v);
 
     let onOK = r => {
       this._loading = false;

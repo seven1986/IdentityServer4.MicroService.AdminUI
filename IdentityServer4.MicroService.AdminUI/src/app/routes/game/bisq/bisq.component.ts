@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CampaignCoreGameClient } from 'campaign.core.game';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ListTable } from '@shared/helper/list-table';
 
@@ -27,7 +26,8 @@ export class BisqComponent extends ListTable implements OnInit {
     _loading = true;
     gameType = 1; // bi神器
 
-    constructor(private api: CampaignCoreGameClient, private message: NzMessageService) { super(); }
+    constructor(private message: NzMessageService) { super(); }
+    
     ngOnInit() {
         //this._loading = true;
         //this.api.AdminGameInstance(this.gameType, 100).subscribe(data => {

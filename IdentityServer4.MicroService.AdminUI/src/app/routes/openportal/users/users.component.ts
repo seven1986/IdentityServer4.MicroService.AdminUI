@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ListTable } from '@shared/helper/list-table';
-import { CampaignCoreIdentityClient } from 'campaign.core.identity'
+import { IdentityServerClient } from 'shingsou.identityserver';
 
 @Component({
   selector: 'app-users',
@@ -13,7 +13,7 @@ export class UsersComponent extends ListTable implements OnInit {
   // filter 
   f: any =
   {
-    'q.Role': 0,
+    'q.Role': '',
     'q.PhoneNumber': '',
     'q.Name': '',
     'q.Email': '',
@@ -23,12 +23,12 @@ export class UsersComponent extends ListTable implements OnInit {
 
   constructor(
     private message: NzMessageService,
-    private api: CampaignCoreIdentityClient) {
+    private api: IdentityServerClient) {
     super(); 
   }
 
   ngOnInit() {
-    this.api.RoleGet().subscribe(r => this.roles = r);
+    this.api.role_get().subscribe(r => this.roles = r);
     this.getData();
   }
 
@@ -36,7 +36,7 @@ export class UsersComponent extends ListTable implements OnInit {
     if (this._loading) { return; }
     this._loading = true;
     let skip = this.q.pageSize * (this.q.pageIndex - 1);
-    this.api.UserGet(
+    this.api.user_get(
       this.f['q.Role'] || 0,
       this.f['q.PhoneNumber'],
       this.f['q.Name'],
@@ -50,10 +50,9 @@ export class UsersComponent extends ListTable implements OnInit {
   }
 
   confirm = (id) => {
-    this.api.UserDelete(id).subscribe(r => {
+    this.api.user_delete(id).subscribe(r => {
       this.message.success('删除成功')
       this.getData();
     });
   }
-
 }

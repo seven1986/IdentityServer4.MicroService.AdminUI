@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CampaignCoreGameClient } from 'campaign.core.game'
 import { AuthService } from '../../oidc/services/auth.service';
 
 @Component({
@@ -9,7 +8,7 @@ import { AuthService } from '../../oidc/services/auth.service';
 })
 export class TestComponent implements OnInit {
 
-  constructor(private api: CampaignCoreGameClient, public auth: AuthService) {
+  constructor(public auth: AuthService) {
   }
 
   vm: any = {

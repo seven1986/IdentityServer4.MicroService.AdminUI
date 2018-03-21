@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
-import { CampaignCoreIdentityClient } from 'campaign.core.identity';
+import { IdentityServerClient } from 'shingsou.identityserver';
 import { NzMessageService } from 'ng-zorro-antd';
 
 
@@ -67,7 +67,7 @@ export class ClientsDetailComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private fb: FormBuilder,
-        private api: CampaignCoreIdentityClient) {
+        private api: IdentityServerClient) {
     }
 
     ngOnInit() {
@@ -84,7 +84,7 @@ export class ClientsDetailComponent implements OnInit {
     initData()
     {
       this._loading = true;
-      this.api.ClientDetail(this.id).subscribe(r => {
+      this.api.client_detail(this.id).subscribe(r => {
         this._loading = false;
         this.initFormByData(r.data);
       });
@@ -319,7 +319,7 @@ export class ClientsDetailComponent implements OnInit {
 
       v.allowedGrantTypes = v.allowedGrantTypes.split('&').map(x => { return { grantType: x } });
 
-      let result = this.id > 0 ? this.api.ClientPut(v) : this.api.ClientPost(v);
+      let result = this.id > 0 ? this.api.client_put(v) : this.api.client_post(v);
 
       let onOK = r =>
       {

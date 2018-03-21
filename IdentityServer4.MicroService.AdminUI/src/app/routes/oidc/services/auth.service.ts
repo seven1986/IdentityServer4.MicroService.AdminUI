@@ -1,5 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Http, RequestOptions, Response, Headers } from "@angular/http";
+//import { Http, RequestOptions, Response, Headers } from "@angular/http";
+import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+
 import { UserManager, UserManagerSettings, User } from 'oidc-client';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../../environments/environment';
@@ -13,7 +15,7 @@ export class AuthService {
     redirect_uri: location.protocol + "//" + location.host + '/auth-callback',
     post_logout_redirect_uri: location.protocol + "//" + location.host + '/logout-callback',
     response_type: "id_token token",
-    scope: "openid profile campaign.core.apis.all campaign.core.identity.all offline_access",
+    scope: "openid profile ids4.ms.all offline_access",
     filterProtocolClaims: true,
     loadUserInfo: true
   });
@@ -26,7 +28,7 @@ export class AuthService {
 
     authHeaders: Headers;
 
-    constructor(private http: Http) {
+  constructor(private http: HttpClient) {
        this.manager.getUser().then((user) => {
                 if (user) {
                     this.loggedIn = true;
@@ -120,85 +122,85 @@ export class AuthService {
 
     endSignoutMainWindow() {
         return this.manager.signoutRedirectCallback();
-    };
+  };
 
-    /**
-     * Example of how you can make auth request using angulars http methods.
-     * @param options if options are not supplied the default content type is application/json
-     */
-    AuthGet(url: string, options?: RequestOptions): Observable<Response> {
+    ///**
+    // * Example of how you can make auth request using angulars http methods.
+    // * @param options if options are not supplied the default content type is application/json
+    // */
+    //AuthGet(url: string, options?: RequestOptions): Observable<Response> {
 
-        if (options) {
-            options = this._setRequestOptions(options);
-        }
-        else {
-            options = this._setRequestOptions();
-        }
-        return this.http.get(url, options);
-    }
-    /**
-     * @param options if options are not supplied the default content type is application/json
-     */
-    AuthPut(url: string, data: any, options?: RequestOptions): Observable<Response> {
+    //    if (options) {
+    //        options = this._setRequestOptions(options);
+    //    }
+    //    else {
+    //        options = this._setRequestOptions();
+    //    }
+    //    return this.http.get(url, options);
+    //}
+    ///**
+    // * @param options if options are not supplied the default content type is application/json
+    // */
+    //AuthPut(url: string, data: any, options?: RequestOptions): Observable<Response> {
 
-        let body = JSON.stringify(data);
+    //    let body = JSON.stringify(data);
 
-        if (options) {
-            options = this._setRequestOptions(options);
-        }
-        else {
-            options = this._setRequestOptions();
-        }
-        return this.http.put(url, body, options);
-    }
-    /**
-     * @param options if options are not supplied the default content type is application/json
-     */
-    AuthDelete(url: string, options?: RequestOptions): Observable<Response> {
+    //    if (options) {
+    //        options = this._setRequestOptions(options);
+    //    }
+    //    else {
+    //        options = this._setRequestOptions();
+    //    }
+    //    return this.http.put(url, body, options);
+    //}
+    ///**
+    // * @param options if options are not supplied the default content type is application/json
+    // */
+    //AuthDelete(url: string, options?: RequestOptions): Observable<Response> {
 
-        if (options) {
-            options = this._setRequestOptions(options);
-        }
-        else {
-            options = this._setRequestOptions();
-        }
-        return this.http.delete(url, options);
-    }
-    /**
-     * @param options if options are not supplied the default content type is application/json
-     */
-    AuthPost(url: string, data: any, options?: RequestOptions): Observable<Response> {
+    //    if (options) {
+    //        options = this._setRequestOptions(options);
+    //    }
+    //    else {
+    //        options = this._setRequestOptions();
+    //    }
+    //    return this.http.delete(url, options);
+    //}
+    ///**
+    // * @param options if options are not supplied the default content type is application/json
+    // */
+    //AuthPost(url: string, data: any, options?: RequestOptions): Observable<Response> {
 
-        let body = JSON.stringify(data);
+    //    let body = JSON.stringify(data);
 
-        if (options) {
-            options = this._setRequestOptions(options);
-        } else {
-            options = this._setRequestOptions();
-        }
-        return this.http.post(url, body, options);
-    }
+    //    if (options) {
+    //        options = this._setRequestOptions(options);
+    //    } else {
+    //        options = this._setRequestOptions();
+    //    }
+    //    return this.http.post(url, body, options);
+    //}
 
-    private _setAuthHeaders(user: any): void {
-        this.authHeaders = new Headers();
-        this.authHeaders.append('Authorization', user.token_type + ' ' + user.access_token);
-        if (this.authHeaders.get('Content-Type')) {
+    //private _setAuthHeaders(user: any): void {
+    //    this.authHeaders = new Headers();
+    //    this.authHeaders.append('Authorization', user.token_type + ' ' + user.access_token);
+    //    if (this.authHeaders.get('Content-Type')) {
 
-        } else {
-            this.authHeaders.append('Content-Type', 'application/json');
-        }
-    }
+    //    } else {
+    //        this.authHeaders.append('Content-Type', 'application/json');
+    //    }
+    //}
 
-    private _setRequestOptions(options?: RequestOptions) {
-        if (this.loggedIn) {
-            this._setAuthHeaders(this.user);
-        }
-        if (options) {
-            options.headers.append(this.authHeaders.keys[0], this.authHeaders.values[0]);
-        } else {
-            options = new RequestOptions({ headers: this.authHeaders });
-        }
+    //private _setRequestOptions(options?: RequestOptions) {
+    //    if (this.loggedIn) {
+    //        this._setAuthHeaders(this.user);
+    //    }
+    //    if (options) {
+    //        options.headers.append(this.authHeaders.keys[0], this.authHeaders.values[0]);
+    //    } else {
+    //        options = new RequestOptions({ headers: this.authHeaders });
+    //    }
 
-        return options;
-    }
+    //    return options;
+    //}
 }

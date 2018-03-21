@@ -13,10 +13,12 @@ export class LogoutCallbackComponent implements OnInit {
 
     ngOnInit() {
         let _router = this.router;
-        this.authService.endSignoutMainWindow().then(res => {
-            _router.navigate(['']);
-        }).catch(err => {
-            _router.navigate(['']);
+      this.authService.endSignoutMainWindow().then(res => {
+            _router.navigate(['passport/login']);
+      }).catch(err => {
+        debugger
+        console.error(err);
+        _router.navigate(['passport/login']);
         });
     }
 }

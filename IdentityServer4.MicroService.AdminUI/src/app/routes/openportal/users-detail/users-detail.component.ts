@@ -7,7 +7,7 @@ import {
     FormArray
 } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { CampaignCoreIdentityClient } from 'campaign.core.identity';
+import { IdentityServerClient } from 'shingsou.identityserver';
 import { allCountryCodes } from './country-code';
 import { NzMessageService } from 'ng-zorro-antd';
 
@@ -33,14 +33,14 @@ export class UsersDetailComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private fb: FormBuilder,
-        private api: CampaignCoreIdentityClient) {
+        private api: IdentityServerClient) {
       this.countryCodes = allCountryCodes;
     }
 
     ngOnInit() {
         this.initForm();
 
-        this.api.RoleGet().subscribe(r => this.roles = r);
+        this.api.role_get().subscribe(r => this.roles = r);
 
         this.id = parseInt(this.route.snapshot.paramMap.get('id'));
 
@@ -53,7 +53,7 @@ export class UsersDetailComponent implements OnInit {
     initData()
     {
       this._loading = true;
-      this.api.UserDetail(this.id).subscribe(r => {
+      this.api.user_detail(this.id).subscribe(r => {
         this._loading = false;
         this.initFormByData(r.data);
       });
@@ -182,7 +182,7 @@ export class UsersDetailComponent implements OnInit {
 
       v.claims.forEach(x => x.userId = v.id);
 
-      let result = this.id > 0 ? this.api.UserPut(v) : this.api.UserPost(v);
+      let result = this.id > 0 ? this.api.user_put(v) : this.api.user_register(v);
 
       let onOK = r =>
       {

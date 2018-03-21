@@ -9,7 +9,6 @@ import {
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 //import { CampaignCoreIdentityClient } from 'campaign.core.identity';
-import { CampaignCoreGameClient } from 'campaign.core.game';
 import { NzMessageService } from 'ng-zorro-antd';
 
 
@@ -34,8 +33,7 @@ export class BisqDetailComponent implements OnInit {
         private msg: NzMessageService,
         private route: ActivatedRoute,
         private router: Router,
-        private fb: FormBuilder,
-        private api: CampaignCoreGameClient) {
+        private fb: FormBuilder,) {
     }
 
     ngOnInit() {
@@ -51,16 +49,16 @@ export class BisqDetailComponent implements OnInit {
     initData() {
         this._loading = true;
        
-        this.api.AdminGameInstance('874539ee-e130-11e6-80c2-00155d454321').subscribe(r => {
-            this._loading = false;
-            this.gameinstance = r.dataArray;
-            this.initFormByData(r.dataArray);
-            for (let i = 0; i < r.dataArray.length; i++) {
-                if (r.dataArray[i].instanceId == this.id) {
-                    this.update = r.dataArray[i];
-                }
-            }
-        });
+        //this.api.AdminGameInstance('874539ee-e130-11e6-80c2-00155d454321').subscribe(r => {
+        //    this._loading = false;
+        //    this.gameinstance = r.dataArray;
+        //    this.initFormByData(r.dataArray);
+        //    for (let i = 0; i < r.dataArray.length; i++) {
+        //        if (r.dataArray[i].instanceId == this.id) {
+        //            this.update = r.dataArray[i];
+        //        }
+        //    }
+        //});
         
     }
 
@@ -187,20 +185,20 @@ export class BisqDetailComponent implements OnInit {
         if (!isNaN(this.id) && this.id > 0) {
             //更新
             this.validateForm.value.instanceId = this.update.instanceId;
-            this.api.AdminGameEditInstance(this.validateForm.value).subscribe(x => {
-                this.initUpdate = x;
-                this.initData();
-                this._loading = false;
-            })
+            //this.api.AdminGameEditInstance(this.validateForm.value).subscribe(x => {
+            //    this.initUpdate = x;
+            //    this.initData();
+            //    this._loading = false;
+            //})
         } else {
             //创建
             
 
             this.validateForm.value.instanceId = 0;
-            this.api.AdminGamePostInstance(this.validateForm.value).subscribe(r => {
-                this.publish = r;
-                this.router.navigate(['/game/bisq']);
-            });
+            //this.api.AdminGamePostInstance(this.validateForm.value).subscribe(r => {
+            //    this.publish = r;
+            //    this.router.navigate(['/game/bisq']);
+            //});
         }
     }
     //图片上传

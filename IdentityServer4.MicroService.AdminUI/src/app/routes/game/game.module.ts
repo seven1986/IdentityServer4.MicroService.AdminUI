@@ -12,9 +12,7 @@ import { PosterComponent } from './poster/poster.component';
 
 
 // Campaign Core Identity SDK
-import { AUTH_INTERCEPTOR } from '@core/net/auth.interceptor';
-import { CampaignCoreGameClient } from 'campaign.core.game'
-import { CampaignCoreIdentityClient } from 'campaign.core.identity'
+import { IdentityServerClient } from 'shingsou.identityserver'
 
 
 const appRoutes: Routes = [
@@ -30,9 +28,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   providers: [
-    CampaignCoreGameClient,
-    CampaignCoreIdentityClient,
-    AUTH_INTERCEPTOR,
+    IdentityServerClient,
   ],
     imports: [
       SharedModule,

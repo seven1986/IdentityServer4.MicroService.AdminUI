@@ -14,7 +14,8 @@ export class AuthGuardService implements CanActivate {
 
         isLoggedIn.subscribe((loggedin) => {
             if (!loggedin) {
-                this.authService.startSigninMainWindow();
+              //this.authService.startSigninMainWindow();
+              this.router.navigate(['/passport/login']);
             }
         });
         return isLoggedIn;

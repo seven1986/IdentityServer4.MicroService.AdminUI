@@ -1,6 +1,7 @@
 export const environment = {
   SERVER_URL: `./`,
   hmr: true,
+  chore: false,
   useHash: false,
   production: false,
   ApiServer: 'https://localhost:44309',

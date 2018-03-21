@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
 
 // Campaign Core Identity SDK
-import { CampaignCoreIdentityClient } from 'campaign.core.identity';
+import { IdentityServerClient } from 'shingsou.identityserver';
 
 import { UsersComponent } from './users/users.component';
 import { UsersDetailComponent } from './users-detail/users-detail.component';
@@ -13,7 +13,6 @@ import { ApiResourcesComponent } from './api-resources/api-resources.component';
 import { IdentityResourcesComponent } from './identity-resources/identity-resources.component';
 import { DevComponent } from './dev/dev.component';
 
-import { AUTH_INTERCEPTOR } from '@core/net/auth.interceptor';
 import { IdentityResourcesDetailComponent } from './identity-resources-detail/identity-resources-detail.component';
 import { ApiResourcesDetailComponent } from './api-resources-detail/api-resources-detail.component';
 import { TenancyComponent } from './tenancy/tenancy.component';
@@ -38,8 +37,7 @@ const COMPONENTS_NOROUNT = [ApiResourcesPublishComponent];
 
 @NgModule({
   providers: [
-    CampaignCoreIdentityClient,
-    AUTH_INTERCEPTOR,
+    IdentityServerClient,
   ],
   imports: [
     SharedModule,

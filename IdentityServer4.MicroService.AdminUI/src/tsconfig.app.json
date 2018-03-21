@@ -10,6 +10,8 @@
       "@shared/*": [ "app/shared/*" ],
       "@core": [ "app/core/" ],
       "@core/*": [ "app/core/*" ],
+      "@testing": [ "testing/" ],
+      "@testing/*": [ "testing/*" ],
       "@env": [ "environments/" ],
       "@env/*": [ "environments/*" ]
     }
@@ -19,8 +21,7 @@
     "**/*.spec.ts"
   ],
   "include": [
-    "**/*",
-    "../node_modules/campaign.core.game/index.ts",
-    "../node_modules/campaign.core.identity/index.ts"
+    "**/*.ts",
+    "../node_modules/shingsou.identityserver/index.ts"
   ]
 }

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service'
 import { MenuService, SettingsService } from '@delon/theme';
 import { ACLService } from '@delon/acl';
+import { debug } from 'util';
 
 @Component({
     selector: 'app-auth-callback',
@@ -18,7 +19,7 @@ private router: Router,
 private settingService: SettingsService,
 private aclService: ACLService,) { }
 
-    ngOnInit(){
+  ngOnInit() {
         let _router = this.router;
 
         this.authService.endSigninMainWindow().then(user =>
@@ -27,27 +28,31 @@ private aclService: ACLService,) { }
                 name: user.profile.name,
                 avatar: "./assets/img/zorro.svg",
                 email: user.profile.name
-            });
+          });
+          
+            if (user.profile.permission) {
 
-            if (user.profile.permission == 'all')
-            {
+              var permissions = user.profile.permission.split(',');
+
+              if (permissions.indexOf('all') > -1) {
                 this.aclService.setFull(true);
-            }
-            else
-            {
+              }
+              else {
                 this.aclService.add({
-                    role: user.profile.role,
-                    ability: user.profile.permission.split(' ')
+                  role: user.profile.role,
+                  ability: permissions
                 });
+
+                this.menuService.resume((item) => {
+                  item.hide = item.acl && !this.aclService.can(item.acl);
+                });
+              }
             }
+          _router.navigate(['']);
 
-            this.menuService.resume((item) => {
-              item.hide = item.acl && !this.aclService.can(item.acl);
-            });
-
-           _router.navigate(['']);
         }).catch(err => {
-           _router.navigate(['']);
+          console.error(err);
+          _router.navigate(['passport/login']);
         });
     }
 }

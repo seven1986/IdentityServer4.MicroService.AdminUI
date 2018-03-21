@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ListTable } from '@shared/helper/list-table';
-import { CampaignCoreIdentityClient } from 'campaign.core.identity'
+import { IdentityServerClient } from 'shingsou.identityserver'
 import { ModalHelper } from '@delon/theme';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ApiResourcesPublishComponent } from '../api-resources-publish/api-resources-publish.component';
-import { Headers, Http } from '@angular/http';
 
 @Component({
   selector: 'app-api-resources',
@@ -21,10 +20,9 @@ export class ApiResourcesComponent extends ListTable implements OnInit {
 
   constructor(
     private message: NzMessageService,
-    private api: CampaignCoreIdentityClient,
+    private api: IdentityServerClient,
     private modalHelper: ModalHelper,
-    public msgSrv: NzMessageService,
-    protected http: Http) {
+    public msgSrv: NzMessageService) {
     super();
   }
 
@@ -33,11 +31,12 @@ export class ApiResourcesComponent extends ListTable implements OnInit {
   supportedClients: any = [];
 
   ngOnInit() {
-    this.api.ApiResourceProducts().subscribe(r => this.products = r.data.value);
-    this.api.AuthorizationServers().subscribe(r => this.authServers = r.data.value);
-    this.http.get('https://generator.swagger.io/api/gen/clients')
-      .map(r => r.ok ? r.json() : r.statusText)
-      .subscribe(r => this.supportedClients = r);
+    this.api.apiresource_products().subscribe(r => this.products = r.data.value);
+    this.api.apiresource_authservers().subscribe(r => this.authServers = r.data.value);
+    this.api.codegen_clients().subscribe(r => this.supportedClients = r)
+    //this.http.get('https://generator.swagger.io/api/gen/clients')
+    //  .map(r => r.ok ? r.json() : r.statusText)
+    //  .subscribe(r => );
 
     this.getData();
   }
@@ -45,7 +44,7 @@ export class ApiResourcesComponent extends ListTable implements OnInit {
   status: any = [];
 
   confirm = (id) => {
-    this.api.ApiResourceDelete(id).subscribe(r => {
+    this.api.apiresource_delete(id).subscribe(r => {
       this.message.success('删除成功')
       this.getData();
     });
@@ -58,7 +57,7 @@ export class ApiResourcesComponent extends ListTable implements OnInit {
 
     let skip = this.q.pageSize * (this.q.pageIndex - 1);
 
-    this.api.ApiResourceGet(
+    this.api.apiresource_get(
       this.f['q.Name'],
       this.q.orderby,
       this.q.asc,

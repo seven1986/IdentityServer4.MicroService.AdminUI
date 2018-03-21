@@ -12,9 +12,9 @@ const appRoutes: Routes = [
 
 @NgModule({
     imports: [
-        CommonModule,
-        RouterModule.forChild(appRoutes),
-        NgZorroAntdModule,
+      CommonModule,
+      RouterModule.forChild(appRoutes),
+      NgZorroAntdModule,
     ],
     declarations: [AuthCallbackComponent, LogoutCallbackComponent]
 })

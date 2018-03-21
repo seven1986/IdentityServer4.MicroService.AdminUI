@@ -1,6 +1,7 @@
 export const environment = {
   SERVER_URL: `./`,
   hmr: false,
+  chore: false,
   useHash: false,
   production: true,
   ApiServer: 'https://openapis.ixingban.com',

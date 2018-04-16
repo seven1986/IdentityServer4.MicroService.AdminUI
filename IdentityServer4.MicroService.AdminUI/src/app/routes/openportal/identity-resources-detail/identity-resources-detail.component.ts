@@ -7,7 +7,7 @@ import {
   FormArray
 } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { IdentityServerClient } from 'shingsou.identityserver';
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 import { NzMessageService } from 'ng-zorro-antd';
 
 
@@ -29,7 +29,7 @@ export class IdentityResourcesDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private api: IdentityServerClient) {
+    private api: IdentityServer4MicroServiceClient) {
   }
 
   ngOnInit() {
@@ -44,7 +44,7 @@ export class IdentityResourcesDetailComponent implements OnInit {
 
   initData() {
     this._loading = true;
-    this.api.identityresource_detail(this.id).subscribe(r => {
+    this.api.IdentityresourceDetail(this.id).subscribe(r => {
       this._loading = false;
       this.initFormByData(r.data);
     });
@@ -114,7 +114,7 @@ export class IdentityResourcesDetailComponent implements OnInit {
   
     v.userClaims.forEach(x => x.id = v.id);
 
-    let result = this.id > 0 ? this.api.identityresource_put(v) : this.api.identityresource_post(v);
+    let result = this.id > 0 ? this.api.IdentityresourcePut(v) : this.api.IdentityresourcePost(v);
 
     let onOK = r => {
       this._loading = false;

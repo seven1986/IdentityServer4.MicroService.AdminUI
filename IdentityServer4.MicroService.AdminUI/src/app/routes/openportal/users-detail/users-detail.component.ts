@@ -7,7 +7,7 @@ import {
     FormArray
 } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { IdentityServerClient } from 'shingsou.identityserver';
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 import { allCountryCodes } from './country-code';
 import { NzMessageService } from 'ng-zorro-antd';
 
@@ -33,14 +33,14 @@ export class UsersDetailComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private fb: FormBuilder,
-        private api: IdentityServerClient) {
+        private api: IdentityServer4MicroServiceClient) {
       this.countryCodes = allCountryCodes;
     }
 
     ngOnInit() {
         this.initForm();
 
-        this.api.role_get().subscribe(r => this.roles = r);
+        this.api.RoleGet().subscribe(r => this.roles = r);
 
         this.id = parseInt(this.route.snapshot.paramMap.get('id'));
 
@@ -53,7 +53,7 @@ export class UsersDetailComponent implements OnInit {
     initData()
     {
       this._loading = true;
-      this.api.user_detail(this.id).subscribe(r => {
+      this.api.UserDetail(this.id).subscribe(r => {
         this._loading = false;
         this.initFormByData(r.data);
       });
@@ -92,6 +92,7 @@ export class UsersDetailComponent implements OnInit {
         claims: this.fb.array([]),
         logins: this.fb.array([]),
         tokens: this.fb.array([]),
+        properties: this.fb.array([]),
 
         files: [null],
         nickName: [null],
@@ -130,6 +131,13 @@ export class UsersDetailComponent implements OnInit {
           continue;
         }
 
+        else if (k == 'properties') {
+          let propertiesFormGroup = v.map(x => this.fb.group(x));
+          let propertiesFormArray = this.fb.array(propertiesFormGroup);
+          this.validateForm.setControl('properties', propertiesFormArray);
+          continue;
+        }
+
         if (this.validateForm.contains(k)) {
 
           this.validateForm.controls[k].setValue(v);
@@ -159,6 +167,20 @@ export class UsersDetailComponent implements OnInit {
       this.claims.removeAt(index);
     }
 
+    get properties(): FormArray {
+    return this.validateForm.get('properties') as FormArray;
+  }
+    addProperties() {
+    this.properties.push(this.fb.group({
+      id: 0,
+      key: '',
+      value: ''
+    }));
+  }
+    delProperties(index) {
+    this.properties.removeAt(index);
+  }
+
     get logins(): FormArray {
       return this.validateForm.get('logins') as FormArray;
     }
@@ -182,7 +204,7 @@ export class UsersDetailComponent implements OnInit {
 
       v.claims.forEach(x => x.userId = v.id);
 
-      let result = this.id > 0 ? this.api.user_put(v) : this.api.user_register(v);
+      let result = this.id > 0 ? this.api.UserPut(v) : this.api.UserRegister(v);
 
       let onOK = r =>
       {

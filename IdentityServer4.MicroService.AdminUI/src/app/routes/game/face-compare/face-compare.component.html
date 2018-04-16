@@ -1,10 +1,11 @@
-<pro-header [title]="'颜值匹配'">
+<page-header [title]="'颜值匹配'">
   <ng-template #action>
     <ng-container *ngIf="selectedRows.length > 0">
       <button nz-button [nzSize]="'large'">批量操作</button>
       <nz-dropdown [nzPlacement]="'bottomLeft'">
         <button nz-button nz-dropdown [nzSize]="'large'">
-          更多操作 <i class="anticon anticon-down"></i>
+          更多操作
+          <i class="anticon anticon-down"></i>
         </button>
         <ul nz-menu>
           <li nz-menu-item (click)="remove()">删除</li>
@@ -13,14 +14,14 @@
       </nz-dropdown>
       &nbsp;
     </ng-container>
-
     <button nz-button routerLink="detail/0" [nzType]="'primary'" [nzSize]="'large'">
-      <i class="anticon anticon-plus"></i><span>创建</span>
+      <i class="anticon anticon-plus"></i>
+      创建
     </button>
-
     <nz-dropdown>
       <button nz-button nz-dropdown [nzType]="'primary'" [nzSize]="'large'">
-        <span>导出</span> <i class="anticon anticon-down"></i>
+        导出
+        <i class="anticon anticon-down"></i>
       </button>
       <ul nz-menu>
         <li nz-menu-item>Excel</li>
@@ -29,9 +30,8 @@
       </ul>
     </nz-dropdown>
   </ng-template>
-</pro-header>
+</page-header>
 <nz-card [nzBordered]="false">
-
   <section class="table-list">
     <h3 class="table-name">活动地址:</h3>
     http://games.ixingban.com/chenxiaopair/index.aspx?accessToken=
@@ -221,4 +221,4 @@
       </table>
     </div>
   </section>
-  </nz-card>
+</nz-card>

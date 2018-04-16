@@ -287,3 +287,5 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 /IdentityServer4.MicroService.AdminUI/package-lock.json
+/IdentityServer4.MicroService.AdminUI/wwwroot
+/IdentityServer4.MicroService.AdminUI/dist/out-tsc

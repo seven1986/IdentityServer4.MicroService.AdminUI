@@ -5,7 +5,7 @@
     },
     "apps": [{
         "root": "src",
-        "outDir": "dist",
+        "outDir": "wwwroot",
         "assets": [
             "assets",
             "favicon.ico"
@@ -56,37 +56,37 @@
             "config": "./karma.conf.js"
         }
     },
-    "defaults": {
-        "schematics": {
-          "collection": "@delon/cli"
-        },
-        "styleExt": "less",
-        "class": {
-            "spec": false
-        },
-        "component": {
-            "flat": false,
-            "spec": false,
-            "inlineStyle": true,
-            "inlineTemplate": false
-        },
-        "directive": {
-            "spec": false
-        },
-        "guard": {
-            "spec": false
-        },
-        "interface": {
-            "prefix": "I"
-        },
-      "module": {
-        "spec": false
-      },
-        "pipe": {
-            "spec": true
-        },
-        "service": {
-            "spec": false
-        }
+  "defaults": {
+    "schematics": {
+      "collection": "@delon/cli"
+    },
+    "styleExt": "less",
+    "class": {
+      "spec": false
+    },
+    "component": {
+      "flat": false,
+      "spec": false,
+      "inlineStyle": true,
+      "inlineTemplate": false
+    },
+    "directive": {
+      "spec": false
+    },
+    "guard": {
+      "spec": false
+    },
+    "interface": {
+      "prefix": "I"
+    },
+    "module": {
+      "spec": false
+    },
+    "pipe": {
+      "spec": true
+    },
+    "service": {
+      "spec": false
     }
+  }
 }

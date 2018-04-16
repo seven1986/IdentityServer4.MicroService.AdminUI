@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ListTable } from '@shared/helper/list-table';
-import { IdentityServerClient } from 'shingsou.identityserver';
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 
 @Component({
   selector: 'app-identity-resources',
@@ -18,7 +18,7 @@ export class IdentityResourcesComponent extends ListTable implements OnInit {
 
   constructor(
     private message: NzMessageService,
-    private api: IdentityServerClient) {
+    private api: IdentityServer4MicroServiceClient) {
     super();
   }
 
@@ -29,7 +29,7 @@ export class IdentityResourcesComponent extends ListTable implements OnInit {
   status: any = [];
 
   confirm = (id) => {
-    this.api.identityresource_delete(id).subscribe(r => {
+    this.api.IdentityresourceDelete(id).subscribe(r => {
       this.message.success('删除成功')
       this.getData();
     });
@@ -42,7 +42,7 @@ export class IdentityResourcesComponent extends ListTable implements OnInit {
 
     let skip = this.q.pageSize * (this.q.pageIndex - 1);
 
-    this.api.identityresource_get(
+    this.api.IdentityresourceGet(
       this.f['q.Name'],
       this.q.orderby,
       this.q.asc,

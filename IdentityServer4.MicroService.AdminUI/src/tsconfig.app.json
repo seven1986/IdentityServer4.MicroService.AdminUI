@@ -22,6 +22,6 @@
   ],
   "include": [
     "**/*.ts",
-    "../node_modules/shingsou.identityserver/index.ts"
+    "../node_modules/jixiu.identityserver.angular2/index.ts"
   ]
 }

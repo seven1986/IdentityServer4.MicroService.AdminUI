@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
-import { IdentityServerClient } from 'shingsou.identityserver';
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 
 @Directive({
   selector: 'input[uploader]'
@@ -9,7 +9,7 @@ export class UploaderDirective {
   @Output() success: any = new EventEmitter();
 
   constructor(private el: ElementRef,
-    private api: IdentityServerClient) {
+    private api: IdentityServer4MicroServiceClient) {
   }
 
   @HostListener('change',['$event'])
@@ -25,7 +25,7 @@ export class UploaderDirective {
 
       formData.append('value', file, file.name);
       
-      this.api.file_image(formData).subscribe(x =>
+      this.api.FileImage(formData).subscribe(x =>
       {
         this.success.emit(x.data);
       })

@@ -1,44 +1,49 @@
-<div nz-row [nzGutter]="40">
-  <div nz-col [nzSpan]="2">
+<nz-row [nzGutter]="40">
+  <nz-col [nzSpan]="2">
     <button nz-button [nzSize]="'large'" routerLink="../../">返回</button>
-  </div>
-  <div nz-col [nzSpan]="2">
+  </nz-col>
+  <nz-col [nzSpan]="2">
     <button nz-button nzType="primary" [nzSize]="'large'" routerLink="detail/0">创建用户</button>
-  </div>
-</div>
+  </nz-col>
+</nz-row>
 <br />
 <nz-spin [nzSpinning]="_loading">
-  <nz-table #nzTable [nzDataSource]="data" [nzPageSize]="10" (nzDataChange)="_displayDataChange($event)">
-    <thead nz-thead>
+  <nz-table #nzTable [nzData]="data" [nzPageSize]="10" (nzDataChange)="_displayDataChange($event)">
+    <thead>
       <tr>
-        <th nz-th [nzCheckbox]="true">
-          <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
-          </label>
+        <th [nzChecked]="true">
+          <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)"></label>
         </th>
-        <th nz-th><span>活动名称</span></th>
-        <th nz-th><span>开始时间</span></th>
-        <th nz-th><span>结束时间</span></th>
-        <th nz-th><span>操作</span></th>
+        <th>
+          <span>活动名称</span>
+        </th>
+        <th>
+          <span>开始时间</span>
+        </th>
+        <th>
+          <span>结束时间</span>
+        </th>
+        <th>
+          <span>操作</span>
+        </th>
       </tr>
     </thead>
-    <tbody nz-tbody>
-      <tr nz-tbody-tr *ngFor="let data of gameinstance?.dataArray">
-        <td nz-td [nzCheckbox]="true">
-          <label nz-checkbox [nzDisabled]="data.disabled" [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)">
-          </label>
+    <tbody>
+      <tr *ngFor="let data of gameinstance?.dataArray">
+        <td [nzChecked]="true">
+          <label nz-checkbox [nzDisabled]="data.disabled" [(ngModel)]="data.checked" (ngModelChange)="_refreshStatus($event)"></label>
         </td>
-        <td nz-td>
+        <td>
           <a>{{data.instanceName}}</a>
         </td>
-        <td nz-td>{{data.startDate}}</td>
-        <td nz-td>{{data.endDate}}</td>
-        <td nz-td>
+        <td>{{data.startDate}}</td>
+        <td>{{data.endDate}}</td>
+        <td>
           <a routerLink="detail/{{data.instanceId}}">编辑</a>
-          <span nz-table-divider></span>
+          <nz-divider nzType="vertical"></nz-divider>
           <nz-popconfirm [nzTitle]="'确定要删除？'" (nzOnConfirm)="confirm(data.instanceId)" (nzOnCancel)="cancel()">
             <a nz-popconfirm>删除</a>
           </nz-popconfirm>
-
         </td>
       </tr>
     </tbody>

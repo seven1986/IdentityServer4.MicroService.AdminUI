@@ -1,15 +1,6 @@
-<p>
-  poster works!
-</p>
-
-
+<p>poster works!</p>
 <div>
   <button (click)="ddd()">12123123123</button>
 </div>
-
-
 <nz-spin [nzTip]="'loading...'" *ngIf="onloading"></nz-spin>
-
-<pre *ngIf="!onloading">
-{{data|json}}
-</pre>
+<pre *ngIf="!onloading">{{data|json}}</pre>

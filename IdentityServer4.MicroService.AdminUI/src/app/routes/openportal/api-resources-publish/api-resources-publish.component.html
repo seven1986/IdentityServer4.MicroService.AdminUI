@@ -1,46 +1,112 @@
-<div class="modal-header">
-  <div class="modal-title">发布微服务</div>
-</div>
-<form #f="ngForm" (ngSubmit)="save()" nz-form [nzType]="'horizontal'">
-  <div nz-form-item nz-row class="mb-sm">
-    <div nz-form-label nz-col [nzSpan]="4"><label class="ant-form-item-required">Suffix</label></div>
-    <div nz-form-control nz-col [nzSpan]="14">
-      <div class="ant-input-group">
-        <span class="ant-input-group-addon ng-star-inserted">http(s)://ApiGatewayServer/</span>
-        <input nz-input [(ngModel)]="vm.suffix" name="suffix" maxlength="32" placeholder="6-32字母和数字组合" required />
-      </div>
-    </div>
-  </div>
+<nz-tabset>
+  <nz-tab nzTitle="发布微服务">
+    <nz-spin [nzSpinning]="loading_getPublishConfiguration||loading_publish">
+      <form #f="ngForm" (ngSubmit)="publish()" nz-form [nzLayout]="'horizontal'">
 
-  <div nz-form-item nz-row class="mb-sm">
-    <div nz-form-label nz-col [nzSpan]="4"><label class="ant-form-item-required">SwaggerUri</label></div>
-    <div nz-form-control nz-col [nzSpan]="20">
-      <input nz-input [(ngModel)]="vm.swaggerUrl" name="SwaggerUri" required />
-    </div>
-  </div>
+        <nz-form-item class="mb-sm">
+          <nz-form-label [nzSpan]="4">显示名称</nz-form-label>
+          <nz-form-control [nzSpan]="10">
+            <input nz-input
+                   [(ngModel)]="vm.name"
+                   name="name"
+                   required>
+          </nz-form-control>
+        </nz-form-item>
 
-  <div nz-form-item nz-row class="mb-sm">
-    <div nz-form-label nz-col [nzSpan]="4"><label>产品组</label></div>
-    <div nz-form-control nz-col [nzSpan]="8">
-      <nz-select [(ngModel)]="vm.productId" name="productId" nzId="productId" [nzPlaceHolder]="'产品组'" [nzSize]="'large'">
-        <nz-option *ngFor="let i of products" [nzLabel]="i.name" [nzValue]="i.id"></nz-option>
-      </nz-select>
-      <ng-container *ngFor="let i of products">
-        <p nz-form-explain *ngIf="i.id==vm.productId">{{i.description}}</p>
-      </ng-container>
-    </div>
-  </div>
+        <nz-form-item class="mb-sm">
+          <nz-form-label [nzSpan]="4">功能简介</nz-form-label>
+          <nz-form-control [nzSpan]="10">
+            <textarea nz-input
+                      [(ngModel)]="vm.description"
+                      name="description"></textarea>
+          </nz-form-control>
+        </nz-form-item>
 
-  <div nz-form-item nz-row class="mb-sm">
-    <div nz-form-label nz-col [nzSpan]="4"><label>OAuth Server</label></div>
-    <div nz-form-control nz-col [nzSpan]="8">
-      <nz-select [(ngModel)]="vm.authorizationServerId" name="authorizationServerId" nzId="authorizationServerId" [nzPlaceHolder]="'OAuth Server'" [nzSize]="'large'">
-        <nz-option *ngFor="let i of authServers" [nzLabel]="i.name" [nzValue]="i.id"></nz-option>
-      </nz-select>
-    </div>
-  </div>
+        <nz-form-item class="mb-sm">
+          <nz-form-label [nzSpan]="4">二级路径</nz-form-label>
+          <nz-form-control [nzSpan]="14">
+            <div class="ant-input-group">
+              <span class="ant-input-group-addon ng-star-inserted">server</span>
+              <input nz-input
+                     [(ngModel)]="vm.suffix"
+                     name="suffix"
+                     maxlength="32"
+                     placeholder="6-32字母和数字组合"
+                     [disabled]="versions.length>0"
+                     required>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
 
-  <!--<div nz-form-item nz-row class="mb-sm">
+        <ng-template [ngIf]="versions.length>0">
+          <nz-form-item class="mb-sm">
+            <nz-form-label [nzSpan]="4">选择版本</nz-form-label>
+            <nz-form-control [nzSpan]="8">
+              <nz-select [(ngModel)]="vm.selectedVersion"
+                         name="selectedVersion"
+                         nzId="selectedVersion"
+                         [nzPlaceHolder]="'版本'"
+                         [nzSize]="'large'"
+                         required>
+                <nz-option-group *ngFor="let i of versions" [nzLabel]="i.apiVersion||'默认'">
+                  <nz-option *ngFor="let x of i.revisions"
+                             [nzLabel]="x.apiRevision=='1'?'默认':'Rev:'+x.apiRevision"
+                             [nzValue]="x.apiId"></nz-option>
+
+                  <nz-option [nzLabel]="'新建修订版'"
+                             [nzValue]="i.id+'.newRevision'"></nz-option>
+                </nz-option-group>
+
+                <nz-option [nzLabel]="'发布新版本'"
+                           [nzValue]="'newVersion'"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item class="mb-sm" *ngIf="vm.selectedVersion=='newVersion'">
+            <nz-form-label [nzSpan]="4">新版本号</nz-form-label>
+            <nz-form-control [nzSpan]="10">
+              <input nz-input
+                     [(ngModel)]="vm.newVersionNumber"
+                     name="newVersionNumber"
+                     required>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-template>
+
+        <nz-form-item class="mb-sm">
+          <nz-form-label [nzSpan]="4">SwaggerUri</nz-form-label>
+          <nz-form-control [nzSpan]="20">
+            <input nz-input [(ngModel)]="vm.swaggerUrl" name="SwaggerUri" required>
+          </nz-form-control>
+        </nz-form-item>
+
+        <ng-template [ngIf]="versions.length<1">
+          <nz-form-item class="mb-sm">
+            <nz-form-label [nzSpan]="4">产品</nz-form-label>
+            <nz-form-control [nzSpan]="8">
+              <nz-select [(ngModel)]="vm.productId" name="productId" nzId="productId" [nzPlaceHolder]="'产品组'" [nzSize]="'large'">
+                <nz-option *ngFor="let i of products" [nzLabel]="i?.name" [nzValue]="i.id"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item class="mb-sm">
+            <nz-form-label [nzSpan]="4">OAuth Server</nz-form-label>
+            <nz-form-control [nzSpan]="8">
+              <nz-select [(ngModel)]="vm.authorizationServerId" name="authorizationServerId" nzId="authorizationServerId" [nzPlaceHolder]="'OAuth Server'" [nzSize]="'large'">
+                <nz-option *ngFor="let i of authServers" [nzLabel]="i?.name" [nzValue]="i.id"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item class="mb-sm">
+            <nz-form-label [nzSpan]="4">访问策略</nz-form-label>
+            <nz-form-control [nzSpan]="20">
+              <textarea nz-input [(ngModel)]="vm.policy" name="policy" rows="5"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-template>
+
+        <!--<div nz-form-item nz-row class="mb-sm">
     <div nz-form-label nz-col [nzSpan]="4"><label>scope</label></div>
     <div nz-form-control nz-col [nzSpan]="8">
       <textarea nz-input [(ngModel)]="vm.scope" name="scope" rows="2"></textarea>
@@ -53,16 +119,216 @@
       <input nz-input [(ngModel)]="vm.openid" name="openid" maxlength="32" />
     </div>
   </div>-->
+        <div class="ant-modal-footer">
+          <button nz-button type="button" (click)="close()">关闭</button>
+          <button nz-button [nzType]="'primary'">发布</button>
+        </div>
+      </form>
+    </nz-spin>
+  </nz-tab>
+  <nz-tab nzTitle="版本管理" (nzSelect)="getVersions()">
+    <nz-alert nzType="success" nzMessage="非默认版本，后面需要参数api-version=版本号"></nz-alert>
+    <br />
+    <nz-spin [nzSpinning]="loading_getVersions">
+      <nz-table #versionsTable [nzData]="versions">
+        <thead>
+          <tr>
+            <th nzWidth="15%">版本</th>
+            <th nzWidth="30%">状态</th>
+            <th>访问地址</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-template ngFor let-data [ngForOf]="versionsTable.data">
+            <tr>
+              <td><nz-tag [nzColor]="'green'">{{data.apiVersion||'默认'}}</nz-tag></td>
+              <td>{{data.revisions[0].createdDateTime}}</td>
+              <td>
+                <nz-tag [nzColor]="'blue'" (click)="openPage(data.id)">
+                  <i class="anticon anticon-book"></i>
+                  文档
+                </nz-tag>
+              </td>
+              <td>
+                <nz-dropdown>
+                  <button nz-button nz-dropdown [nzSize]="'small'">
+                    <span>发包</span>
+                    <i class="anticon anticon-down"></i>
+                  </button>
+                  <ul nz-menu>
+                    <li nz-menu-item>
+                      <a (click)="releasePackage(data.id)">NPM.Angular2</a>
+                    </li>
+                    <li nz-menu-item>
+                      <a (click)="releasePackage(data.id,1)">NPM.jQuery</a>
+                    </li>
+                  </ul>
+                </nz-dropdown>
+              </td>
+            </tr>
+            <ng-template ngFor let-item [ngForOf]="data.revisions">
+              <tr>
+                <td style="padding-left:50px">
+                  <nz-tag [nzColor]="'cyan'" *ngIf="item.apiRevision=='1'; else elseBlock">默认</nz-tag>
+                  <ng-template #elseBlock>
+                    <nz-tag [nzColor]="'cyan'">修订版：{{item.apiRevision}}</nz-tag>
+                  </ng-template>
+                </td>
+                <td>
+                  <nz-badge [nzStatus]="'success'" *ngIf="item.isCurrent==true" [nzText]="'上线'"></nz-badge>
+                </td>
+                <td>
+                  <code>server{{item.privateUrl}}</code>
+                </td>
+                <td>
+                  <a *ngIf="item.isCurrent==false" (click)="releaseRevision(item.apiId)">上线该版本</a>
+                </td>
+              </tr>
+            </ng-template>
+          </ng-template>
+        </tbody>
+      </nz-table>
+      </nz-spin>
+  </nz-tab>
+  <nz-tab nzTitle="更新说明" (nzSelect)="getReleases()">
+    <nz-spin [nzSpinning]="loading_getReleases">
+      <nz-table #versionsTable2 [nzData]="versions">
+        <thead>
+          <tr>
+            <th nzWidth="15%">版本</th>
+            <th>内容</th>
+            <th nzWidth="10%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-template ngFor let-data [ngForOf]="versionsTable2.data" let-i="index">
+            <tr>
+              <td><nz-tag [nzColor]="'green'">{{data.apiVersion||'默认'}}</nz-tag></td>
+              <td><textarea nz-input [(ngModel)]="releasesItem[i]" rows="2"></textarea></td>
+              <td>
+                <a (click)="createRelease(data.id,i)">新增</a>
+              </td>
+            </tr>
+            <ng-template ngFor let-item [ngForOf]="data.releases">
+              <tr>
+                <td style="padding-left:50px">
+                  <nz-tag [nzColor]="'cyan'">{{item.createdDateTime}}</nz-tag>
+                </td>
+                <td>
+                  <textarea nz-input [(ngModel)]="item.notes" rows="2"></textarea>
+                </td>
+                <td>
+                  <a (click)="updateRelease(item)">更新</a>
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a (click)="removeRelease(item.id)">删除</a>
+                </td>
+              </tr>
+            </ng-template>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </nz-spin>
+  </nz-tab>
+  <nz-tab nzTitle="订阅列表" (nzSelect)="getSubscriptions()">
+    <nz-spin [nzSpinning]="loading_getSubscriptions">
+      <nz-table #subscriptionsTable [nzData]="subscriptions">
+        <thead>
+          <tr>
+            <th nzWidth="35%">邮箱</th>
+            <th>订阅时间</th>
+            <th nzWidth="10%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-template ngFor let-data [ngForOf]="subscriptionsTable.data">
+            <tr>
+              <td>{{data.rowKey}}</td>
+              <td>{{data.timestamp}}</td>
+              <td></td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </nz-table>
+    </nz-spin>
+  </nz-tab>
+  <nz-tab nzTitle="发布设置">
+    <nz-radio-group [(ngModel)]="npmOptionsLanguageKey" (click)="getNPMOptions()">
+      <label nz-radio-button nzValue="0">NPM.Angular2</label>
+      <label nz-radio-button nzValue="1">NPM.jQuery</label>
+    </nz-radio-group>
 
-  <div nz-form-item nz-row class="mb-sm">
-    <div nz-form-label nz-col [nzSpan]="4"><label>Policy</label></div>
-    <div nz-form-control nz-col [nzSpan]="20">
-      <textarea nz-input [(ngModel)]="vm.policy" name="policy" rows="5" placeholder="{{policyExample}}"></textarea>
-    </div>
-  </div>
+    <nz-spin [nzSpinning]="loading_getNPMOptions">
+      <form nz-form name="npmOptionsForm" (ngSubmit)="setNPMOptions()">
+        <nz-form-item>
+          <label>name</label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="npmOptions.name" name="npmOptionsname">
+          </nz-form-control>
+        </nz-form-item>
 
-  <div class="modal-footer">
-    <button nz-button type="button" (click)="close()">关闭</button>
-    <button nz-button [disabled]="!f.form.valid" [nzLoading]="loading" [nzType]="'primary'">发布</button>
-  </div>
-</form>
+        <nz-form-item>
+          <label>version</label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="npmOptions.version" name="npmOptionsversion">
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <label>author</label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="npmOptions.author" name="npmOptionsauthor">
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <label>description</label>
+          <nz-form-control>
+            <textarea nz-input [(ngModel)]="npmOptions.description" rows="5" name="npmOptionsdescription"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <label>homepage</label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="npmOptions.homepage" name="npmOptionshomepage">
+          </nz-form-control>
+        </nz-form-item>
+        <!--<nz-form-item>
+          <label>keywords</label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="npmOptions.keywords" name="npmOptionskeywords">
+          </nz-form-control>
+        </nz-form-item>-->
+        <nz-form-item>
+          <label>license</label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="npmOptions.license" name="npmOptionslicense">
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <label>readme</label>
+          <nz-form-control>
+            <textarea nz-input [(ngModel)]="npmOptions.readme" rows="5" name="npmOptionsreadme"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <label>token</label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="npmOptions.token" name="npmOptionstoken">
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button nzType="primary" type="submit">提交</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-spin>
+  </nz-tab>
+</nz-tabset>
+
+
+

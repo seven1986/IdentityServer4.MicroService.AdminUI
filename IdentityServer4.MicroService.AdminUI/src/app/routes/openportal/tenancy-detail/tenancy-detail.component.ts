@@ -7,7 +7,7 @@ import {
   FormArray
 } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { IdentityServerClient } from 'shingsou.identityserver';
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 import { NzMessageService } from 'ng-zorro-antd';
 
 
@@ -34,7 +34,7 @@ export class TenancyDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private api: IdentityServerClient) {
+    private api: IdentityServer4MicroServiceClient) {
   }
 
   ngOnInit() {
@@ -49,7 +49,7 @@ export class TenancyDetailComponent implements OnInit {
 
   initData() {
     this._loading = true;
-    this.api.tenant_detail(this.id).subscribe(r => {
+    this.api.TenantDetail(this.id).subscribe(r => {
       this._loading = false;
       this.initFormByData(r.data);
     });
@@ -259,7 +259,7 @@ export class TenancyDetailComponent implements OnInit {
 
     let v = this.validateForm.value;
 
-    let result = this.id > 0 ? this.api.tenant_put(v) : this.api.tenant_post(v);
+    let result = this.id > 0 ? this.api.TenantPut(v) : this.api.TenantPost(v);
 
     let onOK = r => {
       this._loading = false;

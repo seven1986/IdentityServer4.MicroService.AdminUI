@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
 
 // Campaign Core Identity SDK
-import { IdentityServerClient } from 'shingsou.identityserver';
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 
 import { UsersComponent } from './users/users.component';
 import { UsersDetailComponent } from './users-detail/users-detail.component';
@@ -37,7 +37,7 @@ const COMPONENTS_NOROUNT = [ApiResourcesPublishComponent];
 
 @NgModule({
   providers: [
-    IdentityServerClient,
+    IdentityServer4MicroServiceClient,
   ],
   imports: [
     SharedModule,

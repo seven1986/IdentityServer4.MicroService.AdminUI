@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ListTable } from '@shared/helper/list-table';
-import { IdentityServerClient } from 'shingsou.identityserver';
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 
 @Component({
   selector: 'app-clients',
@@ -13,7 +13,7 @@ export class ClientsComponent extends ListTable implements OnInit {
 
   constructor(
     private message: NzMessageService,
-    private api: IdentityServerClient) {
+    private api: IdentityServer4MicroServiceClient) {
       super(); 
   }
 
@@ -24,7 +24,7 @@ export class ClientsComponent extends ListTable implements OnInit {
   status:any=[];
 
   confirm = (id) => {
-    this.api.client_delete(id).subscribe(r => {
+    this.api.ClientDelete(id).subscribe(r => {
       this.message.success('删除成功')
       this.getData();
     });
@@ -37,7 +37,7 @@ export class ClientsComponent extends ListTable implements OnInit {
 
     let skip = this.q.pageSize * (this.q.pageIndex - 1);
 
-    this.api.client_get('', '', this.q.orderby, this.q.asc, skip, this.q.pageSize)
+    this.api.ClientGet('', '', this.q.orderby, this.q.asc, skip, this.q.pageSize)
       .subscribe(r => this.vm = r)
       .add(() => { this._loading = false; });
   }

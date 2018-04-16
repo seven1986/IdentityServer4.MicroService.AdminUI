@@ -1,67 +1,51 @@
-<pro-header [title]="'微服务'">
-  <ng-template #breadcrumb>
-    <nz-breadcrumb>
-      <nz-breadcrumb-item><a [routerLink]="['/']">首页</a></nz-breadcrumb-item>
-      <nz-breadcrumb-item>开放平台</nz-breadcrumb-item>
-      <nz-breadcrumb-item>资源</nz-breadcrumb-item>
-      <nz-breadcrumb-item><a [routerLink]="['/openportal/apiresources']">微服务</a></nz-breadcrumb-item>
-    </nz-breadcrumb>
-  </ng-template>
-</pro-header>
-
-
+<page-header [title]="'微服务'">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a [routerLink]="['/']">首页</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>开放平台</nz-breadcrumb-item>
+    <nz-breadcrumb-item>资源</nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a [routerLink]="['/openportal/apiresources']">微服务</a>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+</page-header>
 <nz-card [nzBordered]="false">
   <nz-spin [nzSpinning]="_loading">
     <form nz-form [formGroup]="validateForm" (ngSubmit)="AddOrUpdate()">
-      <div nz-row>
-        <div nz-col [nzSpan]="12">
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="name" nz-form-item-required>name</label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('name')">
-              <nz-input [nzSize]="'large'" formControlName="name" [nzId]="'name'"></nz-input>
-              <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('name')">The input is not valid name!</div>
-            </div>
-          </div>
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="displayName" nz-form-item-required>
-                displayName
-              </label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('displayName')">
-              <nz-input [nzSize]="'large'" formControlName="displayName" [nzId]="'displayName'"></nz-input>
-            </div>
-          </div>
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="description" nz-form-item-required>
-                description
-              </label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('description')">
-              <nz-input [nzSize]="'large'" formControlName="description" [nzId]="'description'" [nzType]="'textarea'" [nzRows]="'2'"></nz-input>
-            </div>
-          </div>
-
-          <div nz-form-item nz-row style="margin-bottom:8px;">
-            <div nz-form-control nz-col [nzSpan]="14" [nzOffset]="6">
+      <nz-row>
+        <nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">name</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input [nzSize]="'large'" formControlName="name" nz-input>
+              <nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('name')">The input is not valid name!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">displayName</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <input [nzSize]="'large'" formControlName="displayName" nz-input>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">description</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <textarea [nzSize]="'large'" formControlName="description" rows="2" nz-input></textarea>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item style="margin-bottom:8px;">
+            <nz-form-control [nzSpan]="14" [nzOffset]="6">
               <label nz-checkbox formControlName="enabled">
-                <span>enabled</span>
+                enabled
               </label>
-            </div>
-          </div>
-
-        </div>
-        <div nz-col [nzSpan]="12">
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+        <nz-col [nzSpan]="12">
           <div class="ant-card-bordered ant-card">
             <div class="ant-card-head">
-              <h3 class="ant-card-head-title">
-                UserClaims
-              </h3>
+              <h3 class="ant-card-head-title">UserClaims</h3>
               <div class="ant-card-extra">
                 <a (click)="addClaim()">
                   <i class="anticon anticon-plus"></i>
@@ -69,34 +53,28 @@
                 </a>
               </div>
             </div>
-
             <div class="ant-card-body">
               <div formArrayName="userClaims">
-                <div *ngFor="let x of userClaims.controls; let i=index"
-                     [formGroupName]="i">
-                  <div nz-form-item nz-row>
-                    <div nz-form-control nz-col [nzSpan]="12">
-                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="type">
-                      </nz-input>
+                <div *ngFor="let x of userClaims.controls; let i=index" [formGroupName]="i">
+                  <nz-form-item>
+                    <nz-form-control [nzSpan]="12">
+                      <input style="width: 80%; margin-right:8px;" class="form-control" formControlName="type" nz-input>
                       <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delClaim(i,$event)"></i>
-                    </div>
-                  </div>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-      </div>
-      <div nz-row>
+        </nz-col>
+      </nz-row>
+      <nz-row>
         <div col>
-          <br />
-          <br />
+          <br>
+          <br>
           <div class="ant-card-bordered ant-card">
             <div class="ant-card-head">
-              <h3 class="ant-card-head-title">
-                Secrets
-              </h3>
+              <h3 class="ant-card-head-title">Secrets</h3>
               <div class="ant-card-extra">
                 <a (click)="addSecret()">
                   <i class="anticon anticon-plus"></i>
@@ -104,40 +82,46 @@
                 </a>
               </div>
             </div>
-
             <div class="ant-card-body">
               <div class="ant-table ant-table-small">
                 <table>
                   <thead class="ant-table-thead">
                     <tr>
-                      <th nz-th>type</th>
-                      <th nz-th>expiration</th>
-                      <th nz-th>value</th>
-                      <th nz-th>description</th>
-                      <th nz-th>operation</th>
+                      <th>type</th>
+                      <th>expiration</th>
+                      <th>value</th>
+                      <th>description</th>
+                      <th>operation</th>
                     </tr>
                   </thead>
                   <tbody formArrayName="secrets" class="ant-table-tbody">
-                    <tr nz-tbody-tr *ngFor="let x of secrets.controls; let i=index" [formGroupName]="i">
-                      <td nz-td><nz-input class="form-control" formControlName="type"></nz-input></td>
-                      <td nz-td><nz-datepicker formControlName="expiration" class="form-control"></nz-datepicker></td>
-                      <td nz-td><nz-input class="form-control" formControlName="value"></nz-input></td>
-                      <td nz-td><nz-input class="form-control" [nzType]="'textarea'" [nzRows]="'2'" formControlName="description"></nz-input></td>
-                      <td><a nz-button [nzType]="'default'" (click)="delSecret(i,$event)">delete</a></td>
+                    <tr *ngFor="let x of secrets.controls; let i=index" [formGroupName]="i">
+                      <td>
+                        <input class="form-control" formControlName="type" nz-input>
+                      </td>
+                      <td>
+                        <!--<nz-datepicker formControlName="expiration" class="form-control"></nz-datepicker>-->
+                      </td>
+                      <td>
+                        <input class="form-control" formControlName="value" nz-input>
+                      </td>
+                      <td>
+                        <textarea class="form-control" rows="2" formControlName="description" nz-input></textarea>
+                      </td>
+                      <td>
+                        <a nz-button [nzType]="'default'" (click)="delSecret(i,$event)">delete</a>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
-
-          <br /><br />
-
+          <br>
+          <br>
           <div class="ant-card-bordered ant-card">
             <div class="ant-card-head">
-              <h3 class="ant-card-head-title">
-                Scopes
-              </h3>
+              <h3 class="ant-card-head-title">Scopes</h3>
               <div class="ant-card-extra">
                 <a (click)="addScope()">
                   <i class="anticon anticon-plus"></i>
@@ -145,45 +129,53 @@
                 </a>
               </div>
             </div>
-
             <div class="ant-card-body">
               <div class="ant-table ant-table-small">
-                <nz-table [nzSize]="'small'" [nzCustomNoResult]="true" [nzIsPagination]="false">
+                <nz-table [nzSize]="'small'" [nzNoResult]="true" [nzShowPagination]="false">
                   <thead class="ant-table-thead">
                     <tr>
-                      <th nz-th>name</th>
-                      <th nz-th>displayName</th>
-                      <th nz-th>description</th>
-                      <th nz-th>userClaims</th>
-                      <th nz-th>required</th>
-                      <th nz-th>emphasize</th>
-                      <th nz-th>showInDiscoveryDocument</th>
-                      <th nz-th>operation</th>
+                      <th>name</th>
+                      <th>displayName</th>
+                      <th>description</th>
+                      <th>userClaims</th>
+                      <th>required</th>
+                      <th>emphasize</th>
+                      <th>showInDiscoveryDocument</th>
+                      <th>operation</th>
                     </tr>
                   </thead>
                   <tbody formArrayName="scopes" class="ant-table-tbody">
-                    <tr nz-tbody-tr *ngFor="let x of scopes.controls; let i=index" [formGroupName]="i">
-                      <td nz-td><nz-input class="form-control" formControlName="name"></nz-input></td>
-                      <td nz-td><nz-input class="form-control" [nzType]="'textarea'" [nzRows]="'2'" formControlName="displayName"></nz-input></td>
-                      <td nz-td><nz-input class="form-control" [nzType]="'textarea'" [nzRows]="'2'" formControlName="description"></nz-input></td>
-                      <td nz-td formArrayName="userClaims">
-                        <div *ngFor="let c of x.get('userClaims').controls; let j=index"
-                             [formGroupName]="j">
-                          <div nz-form-control nz-col [nzSpan]="20">
-                            <nz-input style="width: 60%; margin-right:8px;"
-                                      formControlName="type">
-                            </nz-input>
-                            <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delScopeOfUserClaims(x,j)"></i>
-                          </div>
-                        </div>
-                        <a href="javascript:;" nz-button [nzSize]="'small'" [nzType]="'dashed'" (click)="addScopeOfUserClaims(x)">
-                          +
-                        </a>
+                    <tr *ngFor="let x of scopes.controls; let i=index" [formGroupName]="i">
+                      <td>
+                        <input class="form-control" formControlName="name" nz-input>
                       </td>
-                      <td nz-td><nz-switch [nzSize]="'small'" formControlName="required"></nz-switch></td>
-                      <td nz-td><nz-switch [nzSize]="'small'" formControlName="emphasize"></nz-switch></td>
-                      <td nz-td><nz-switch [nzSize]="'small'" formControlName="showInDiscoveryDocument"></nz-switch></td>
-                      <td><a nz-button [nzType]="'default'" (click)="delScope(i,$event)">delete</a></td>
+                      <td>
+                        <textarea class="form-control" rows="2" formControlName="displayName" nz-input></textarea>
+                      </td>
+                      <td>
+                        <textarea class="form-control" rows="2"  formControlName="description" nz-input></textarea>
+                      </td>
+                      <td formArrayName="userClaims">
+                        <div *ngFor="let c of x.get('userClaims').controls; let j=index" [formGroupName]="j">
+                          <nz-form-control [nzSpan]="20">
+                            <input style="width: 60%; margin-right:8px;" formControlName="type" nz-input>
+                            <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delScopeOfUserClaims(x,j)"></i>
+                          </nz-form-control>
+                        </div>
+                        <a href="javascript:;" nz-button [nzSize]="'small'" [nzType]="'dashed'" (click)="addScopeOfUserClaims(x)">+</a>
+                      </td>
+                      <td>
+                        <nz-switch [nzSize]="'small'" formControlName="required"></nz-switch>
+                      </td>
+                      <td>
+                        <nz-switch [nzSize]="'small'" formControlName="emphasize"></nz-switch>
+                      </td>
+                      <td>
+                        <nz-switch [nzSize]="'small'" formControlName="showInDiscoveryDocument"></nz-switch>
+                      </td>
+                      <td>
+                        <a nz-button [nzType]="'default'" (click)="delScope(i,$event)">delete</a>
+                      </td>
                     </tr>
                   </tbody>
                 </nz-table>
@@ -191,8 +183,7 @@
             </div>
           </div>
         </div>
-      </div>
-
+      </nz-row>
       <footer-toolbar fixed-btns>
         <error-collect></error-collect>
         <button nz-button [nzSize]="'large'" [nzType]="'primary'">{{id>0?'更新':'创建'}}</button>

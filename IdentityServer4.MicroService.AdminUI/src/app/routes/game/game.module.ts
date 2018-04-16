@@ -12,7 +12,7 @@ import { PosterComponent } from './poster/poster.component';
 
 
 // Campaign Core Identity SDK
-import { IdentityServerClient } from 'shingsou.identityserver'
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 
 
 const appRoutes: Routes = [
@@ -28,7 +28,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   providers: [
-    IdentityServerClient,
+    IdentityServer4MicroServiceClient,
   ],
     imports: [
       SharedModule,

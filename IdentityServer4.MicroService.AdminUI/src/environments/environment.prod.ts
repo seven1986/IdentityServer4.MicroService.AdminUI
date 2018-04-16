@@ -1,23 +1,22 @@
 export const environment = {
   SERVER_URL: `./`,
   hmr: false,
-  chore: false,
   useHash: false,
   production: true,
-  ApiServer: 'https://openapis.ixingban.com',
+  ApiServer: 'https://localhost:44309',
   IdentityServer: {
-    authority: 'https://ids.ixingban.com',
+    authority: 'https://localhost:44309',
     client_id: 'adminportal'
   },
   ApimSubscription:
   [
-    {
-      subPath: '/ids/',
-      subKey: 'af2e835201804caa8bec3cb8bc898af5'
-    },
-    {
-      subPath: '/game/',
-      subKey: '345e19daf1ce48189b1f7f311e475d5f'
-    }
+    //{
+    //  subPath: '/ids/',
+    //  subKey: 'af2e835201804caa8bec3cb8bc898af5'
+    //},
+    //{
+    //  subPath: '/game/',
+    //  subKey: '345e19daf1ce48189b1f7f311e475d5f'
+    //}
   ]
 };

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ListTable } from '@shared/helper/list-table';
-import { IdentityServerClient } from 'shingsou.identityserver';
+import { IdentityServer4MicroServiceClient } from 'jixiu.identityserver.angular2';
 
 @Component({
   selector: 'app-users',
@@ -23,12 +23,12 @@ export class UsersComponent extends ListTable implements OnInit {
 
   constructor(
     private message: NzMessageService,
-    private api: IdentityServerClient) {
+    private api: IdentityServer4MicroServiceClient) {
     super(); 
   }
 
   ngOnInit() {
-    this.api.role_get().subscribe(r => this.roles = r);
+    this.api.RoleGet().subscribe(r => this.roles = r);
     this.getData();
   }
 
@@ -36,8 +36,8 @@ export class UsersComponent extends ListTable implements OnInit {
     if (this._loading) { return; }
     this._loading = true;
     let skip = this.q.pageSize * (this.q.pageIndex - 1);
-    this.api.user_get(
-      this.f['q.Role'] || 0,
+    this.api.UserGet(
+      this.f['q.Role'],
       this.f['q.PhoneNumber'],
       this.f['q.Name'],
       this.f['q.Email'],
@@ -50,7 +50,7 @@ export class UsersComponent extends ListTable implements OnInit {
   }
 
   confirm = (id) => {
-    this.api.user_delete(id).subscribe(r => {
+    this.api.UserDelete(id).subscribe(r => {
       this.message.success('删除成功')
       this.getData();
     });

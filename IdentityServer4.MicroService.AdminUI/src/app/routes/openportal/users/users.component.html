@@ -1,182 +1,135 @@
-<pro-header [title]="'用户'">
-  <ng-template #action>
-    <ng-container *ngIf="selectedRows.length > 0">
-      <button nz-button [nzSize]="'large'">批量操作</button>
-      <nz-dropdown [nzPlacement]="'bottomLeft'">
-        <button nz-button nz-dropdown [nzSize]="'large'">
-          更多操作 <i class="anticon anticon-down"></i>
-        </button>
-        <ul nz-menu>
-          <li nz-menu-item (click)="remove()">删除</li>
-          <li nz-menu-item (click)="approval()">批量审批</li>
-        </ul>
-      </nz-dropdown>
-      &nbsp;
-    </ng-container>
-
-    <button nz-button routerLink="detail/0" [nzType]="'primary'" [nzSize]="'large'">
-      <i class="anticon anticon-plus"></i><span>创建</span>
-    </button>
-
-    <nz-dropdown>
-      <button nz-button nz-dropdown [nzType]="'primary'" [nzSize]="'large'">
-        <span>导出</span> <i class="anticon anticon-down"></i>
-      </button>
-      <ul nz-menu>
-        <li nz-menu-item>Excel</li>
-        <li nz-menu-item>JSON</li>
-        <li nz-menu-item>PNG</li>
-      </ul>
-    </nz-dropdown>
-  </ng-template>
-</pro-header>
 <nz-card [nzBordered]="false">
-  <form nz-form (ngSubmit)="getData()" [nzLayout]="'inline'">
-    <div nz-row [nzGutter]="24">
-      <div nz-col [nzSpan]="8" class="mb-md">
-        <div nz-form-item class="d-flex">
-          <div nz-form-label><label for="no">用户昵称</label></div>
-          <div nz-form-control class="flex-1">
-            <nz-input [(ngModel)]="f['q.Name']" name="Name" [nzSize]="'large'" [nzPlaceHolder]="'用户昵称'" nzId="Name"></nz-input>
-          </div>
-        </div>
-      </div>
-      <div nz-col [nzSpan]="8" class="mb-md">
-        <div nz-form-item class="d-flex">
-          <div nz-form-label><label for="status">用户角色</label></div>
-          <div nz-form-control class="flex-1">
-            <nz-select style="min-width:150px" [nzTags]="true" 
-                       [nzSize]="'large'"
-                       [nzPlaceHolder]="'请选择角色'"
+  <form nz-form [nzLayout]="'inline'" (ngSubmit)="getData()" class="search__form">
+    <nz-row [nzGutter]="{ md: 8, lg: 24, xl: 48 }">
+      <nz-col nzMd="8" nzSm="24">
+        <nz-form-item>
+          <nz-form-label nzFor="Name">规则编号</nz-form-label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="f['q.Name']" name="Name" placeholder="用户昵称" id="Name">
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+      <nz-col nzMd="8" nzSm="24">
+        <nz-form-item>
+          <nz-form-label nzFor="Role">用户角色</nz-form-label>
+          <nz-form-control>
+            <nz-select id="Role" name="Role"
+                       nzMode="multiple"
+                       nzPlaceHolder="请选择角色"
                        [(ngModel)]="f['q.Role']"
-                       [ngModelOptions]="{standalone: true}"
-                       [nzNotFoundContent]="'无法找到'"
-                       [nzShowSearch]="true">
-              <nz-option *ngFor="let k of roles.data"
-                         [nzLabel]="k.normalizedName"
-                         [nzValue]="k.id">
-              </nz-option>
+                       nzNotFoundContent="无法找到"
+                       nzShowSearch="true">
+              <ng-container *ngFor="let k of roles.data">
+                  <nz-option [nzLabel]="k.normalizedName" [nzValue]="k.id"></nz-option>
+              </ng-container>
             </nz-select>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
-        <div nz-form-item class="d-flex">
-          <div nz-form-label><label for="callNo">手机号码</label></div>
-          <div nz-form-control class="flex-1">
-            <nz-input [(ngModel)]="f['q.PhoneNumber']" name="PhoneNumber" [nzSize]="'large'" [nzPlaceHolder]="'手机号码'" nzId="PhoneNumber"></nz-input>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
-        <div nz-form-item class="d-flex">
-          <div nz-form-label><label for="updatedAt">更新日期</label></div>
-          <div nz-form-control class="flex-1">
-            <nz-datepicker [nzSize]="'large'" [nzPlaceHolder]="'请输入更新日期'" nzId="updatedAt" class="d-block"></nz-datepicker>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
-        <div nz-form-item class="d-flex">
-          <div nz-form-label><label for="callNo">邮箱账号</label></div>
-          <div nz-form-control class="flex-1">
-            <nz-input [(ngModel)]="f['q.Email']" name="Email" [nzSize]="'large'" [nzPlaceHolder]="'邮箱账号'" nzId="Email"></nz-input>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
-        <div nz-form-item class="d-flex">
-          <div nz-form-label><label for="status3">使用状态</label></div>
-          <div nz-form-control class="flex-1">
-            <nz-select [nzPlaceHolder]="'请选择'" nzId="status3" [nzShowSearch]="true" [nzSize]="'large'">
-              <nz-option *ngFor="let i of status; let idx = index" [nzLabel]="i.text" [nzValue]="idx"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-      </div>
-      <div nz-col [nzSpan]="expandForm ? 24 : 8" class="mb-md" [class.text-right]="expandForm">
-        <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="_loading" [nzSize]="'large'">查询</button>
-        <button nz-button type="reset" (click)="getData()" [nzSize]="'large'" class="mx-sm">重置</button>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+      <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+        <nz-form-item>
+          <nz-form-label nzFor="PhoneNumber">手机号码</nz-form-label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="f['q.PhoneNumber']"
+                   name="PhoneNumber"
+                   placeholder="手机号码"
+                   id="PhoneNumber">
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+      <nz-col nzMd="8" nzSm="24" *ngIf="expandForm">
+        <nz-form-item>
+          <nz-form-label nzFor="updatedAt">更新日期</nz-form-label>
+          <nz-form-control>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+      <nz-col [nzSpan]="expandForm ? 24 : 8" [class.text-right]="expandForm">
+        <button nz-button type="submit" [nzType]="'primary'">查询</button>
+        <button nz-button type="reset" (click)="getData()" class="mx-sm">重置</button>
         <a (click)="expandForm=!expandForm">
           {{expandForm ? '收起' : '展开'}}
           <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
         </a>
-      </div>
-    </div>
+      </nz-col>
+    </nz-row>
   </form>
-  <div class="mb-md">
-    <nz-alert [nzType]="'info'" [nzShowIcon]="true">
-      <span alert-body>
-        已选择 <strong class="text-primary">{{selectedRows.length}}</strong> 条&nbsp;&nbsp;
+  <button nz-button routerLink="detail/0" [nzType]="'primary'">
+    <i class="anticon anticon-plus"></i><span>新建</span>
+  </button>
+  <ng-container *ngIf="selectedRows.length > 0">
+    <button nz-button class="ml-sm">批量操作</button>
+    <nz-dropdown [nzPlacement]="'bottomLeft'">
+      <button nz-button nz-dropdown class="ml-sm">
+        更多操作 <i class="anticon anticon-down"></i>
+      </button>
+      <ul nz-menu>
+        <li nz-menu-item (click)="remove()">删除</li>
+        <li nz-menu-item (click)="approval()">批量审批</li>
+      </ul>
+    </nz-dropdown>
+  </ng-container>
+  <div class="my-md">
+    <nz-alert [nzType]="'info'" [nzShowIcon]="true" [nzMessage]="message">
+      <ng-template #message>
+        已选择 <strong class="text-primary">{{selectedRows.length}}</strong> 项&nbsp;&nbsp;
         总计 <strong>{{vm.total}}</strong> 条
-      </span>
+      </ng-template>
     </nz-alert>
   </div>
-  <nz-table #nzTable
-            [nzLoading]="_loading"
-            [nzAjaxData]="vm.data"
-            [nzTotal]="vm.total"
-            [(nzPageSize)]="q.pageSize"
-            [(nzPageIndex)]="q.pageIndex"
-            (nzPageIndexChange)="getData()"
-            (nzPageSizeChange)="getData()"
-            [nzShowSizeChanger]="true">
-    <thead nz-thead>
+  <nz-table #nzTable [nzLoading]="_loading" [nzData]="vm.data" [nzTotal]="vm.total" [(nzPageSize)]="q.pageSize" [(nzPageIndex)]="q.pageIndex" (nzPageIndexChange)="getData()" (nzPageSizeChange)="getData()" [nzShowSizeChanger]="true">
+    <thead>
       <tr>
-        <th nz-th [nzCheckbox]="true">
-          <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)">
-          </label>
+        <th [nzChecked]="true">
+          <label nz-checkbox [(ngModel)]="_allChecked" [nzIndeterminate]="_indeterminate" (ngModelChange)="_checkAll($event)"></label>
         </th>
-        <th nz-th>
+        <th nzShowSort nzSortKey="id">
           <span>用户</span>
-          <nz-table-sort (nzValueChange)="_sort('id',$event)"></nz-table-sort>
         </th>
-        <th nz-th>
+        <th nzShowSort nzSortKey="email">
           <span>邮箱</span>
-          <nz-table-sort (nzValueChange)="_sort('email',$event)"></nz-table-sort>
         </th>
-        <th nz-th>
+        <th nzShowSort nzSortKey="phoneNumber">
           <span>电话</span>
-          <nz-table-sort (nzValueChange)="_sort('phoneNumber',$event)"></nz-table-sort>
         </th>
-        <th nz-th>
+        <th>
           <span>关联账号</span>
         </th>
-        <th nz-th>
+        <th nzShowSort nzSortKey="createDate">
           <span>注册时间</span>
-          <nz-table-sort (nzValueChange)="_sort('createDate',$event)"></nz-table-sort>
         </th>
-        <th nz-th><span>操作</span></th>
+        <th>
+          <span>操作</span>
+        </th>
       </tr>
     </thead>
-    <tbody nz-tbody>
-      <tr nz-tbody-tr *ngFor="let x of nzTable.data">
-        <td nz-td [nzCheckbox]="true">
-          <label nz-checkbox [(ngModel)]="x.checked" (ngModelChange)="_refreshStatus($event)">
-          </label>
+    <tbody>
+      <tr *ngFor="let x of nzTable.data">
+        <td [nzChecked]="true">
+          <label nz-checkbox [(ngModel)]="x.checked" (ngModelChange)="_refreshStatus($event)"></label>
         </td>
-        <td nz-td>
-          <div nz-row>
-            <div nz-col [nzSpan]="6">
+        <td>
+          <nz-row>
+            <nz-col [nzSpan]="6">
               <nz-avatar *ngIf="x.avatar" [nzShape]="'square'" [nzSize]="'large'" nzSrc="{{x.avatar}}"></nz-avatar>
-            </div>
-            <div nz-col [nzSpan]="18">
+            </nz-col>
+            <nz-col [nzSpan]="18">
               {{x.userName}}
               <p>
                 <nz-tag *ngFor="let r of x.roles">{{r.name}}</nz-tag>
               </p>
-            </div>
-          </div>
+            </nz-col>
+          </nz-row>
         </td>
-        <td nz-td>{{x.email}}</td>
-        <td nz-td>{{x.phoneNumber}}</td>
-        <td nz-td>
+        <td>{{x.email}}</td>
+        <td>{{x.phoneNumber}}</td>
+        <td>
           <span *ngFor="let x of x.logins">{{x.loginProvider}}</span>
         </td>
-        <td nz-td>{{x.createDate}}</td>
-        <td nz-td>
+        <td>{{x.createDate}}</td>
+        <td>
           <a routerLink="detail/{{x.userId}}">编辑</a>
-          <span nz-table-divider></span>
+          <nz-divider nzType="vertical"></nz-divider>
           <nz-popconfirm [nzTitle]="'确定要删除？'" (nzOnConfirm)="confirm(x.id)">
             <a nz-popconfirm>删除</a>
           </nz-popconfirm>

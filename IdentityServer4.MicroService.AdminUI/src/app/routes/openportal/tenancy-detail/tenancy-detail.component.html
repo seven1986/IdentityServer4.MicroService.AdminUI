@@ -1,110 +1,68 @@
-<pro-header [title]="'租户'">
-  <ng-template #breadcrumb>
-    <nz-breadcrumb>
-      <nz-breadcrumb-item><a [routerLink]="['/']">首页</a></nz-breadcrumb-item>
-      <nz-breadcrumb-item>开放平台</nz-breadcrumb-item>
-      <nz-breadcrumb-item><a [routerLink]="['/openportal/tenancy']">自定义域</a></nz-breadcrumb-item>
-    </nz-breadcrumb>
-  </ng-template>
-</pro-header>
-
-
+<page-header [title]="'租户'">
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a [routerLink]="['/']">首页</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>开放平台</nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a [routerLink]="['/openportal/tenancy']">自定义域</a>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+</page-header>
 <nz-card [nzBordered]="false">
   <nz-spin [nzSpinning]="_loading">
-    <pre>
-
-</pre>
+    <pre></pre>
     <form nz-form [formGroup]="validateForm" (ngSubmit)="AddOrUpdate()">
-      <div nz-row>
-        <div nz-col [nzSpan]="12">
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="name" nz-form-item-required>name</label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('name')">
-              <nz-input [nzSize]="'large'" formControlName="name" [nzId]="'name'"></nz-input>
-              <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('name')">The input is not valid name!</div>
-            </div>
-          </div>
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="theme" nz-form-item-required>
-                theme
-              </label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('theme')">
-              <nz-input [nzSize]="'large'" formControlName="theme" [nzId]="'theme'"></nz-input>
-            </div>
-          </div>
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="identityServerIssuerUri" nz-form-item-required>
-                identityServerIssuerUri
-              </label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('identityServerIssuerUri')">
-              <nz-input [nzSize]="'large'" formControlName="identityServerIssuerUri" [nzId]="'identityServerIssuerUri'"></nz-input>
-            </div>
-          </div>
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="cacheDuration" nz-form-item-required>
-                cacheDuration
-              </label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('cacheDuration')">
+      <nz-row>
+        <nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">name</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+              <input [nzSize]="'large'" formControlName="name" nz-input>
+              <nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('name')">The input is not valid name!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">theme</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+              <input [nzSize]="'large'" formControlName="theme" nz-input>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">identityServerIssuerUri</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+              <input [nzSize]="'large'" formControlName="identityServerIssuerUri" nz-input>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">cacheDuration</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
               <nz-input-number [nzSize]="'large'" [nzMax]="31536000" [nzMin]="60" formControlName="cacheDuration"></nz-input-number>
-            </div>
-          </div>
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="status" nz-form-item-required>
-                status
-              </label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('status')">
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">status</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
               <nz-select formControlName="status" name="selectValue">
-                <nz-option *ngFor="let option of tenantStatus"
-                           [nzLabel]="option.label"
-                           [nzValue]="option.id">
-                </nz-option>
+                <nz-option *ngFor="let option of tenantStatus" [nzLabel]="option.label" [nzValue]="option.id"></nz-option>
               </nz-select>
-
-            </div>
-          </div>
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="createDate" nz-form-item-required>
-                createDate
-              </label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('createDate')">
-              <nz-datepicker [nzSize]="'large'" formControlName="createDate" class="form-control"></nz-datepicker>
-            </div>
-          </div>
-
-          <div nz-form-item nz-row>
-            <div nz-form-label nz-col [nzSm]="6" [nzXs]="24">
-              <label for="lastUpdateTime" nz-form-item-required>
-                lastUpdateTime
-              </label>
-            </div>
-            <div nz-form-control nz-col [nzSm]="14" [nzXs]="24" nzHasFeedback [nzValidateStatus]="getFormControl('lastUpdateTime')">
-              <nz-datepicker [nzSize]="'large'" formControlName="lastUpdateTime" class="form-control"></nz-datepicker>
-            </div>
-          </div>
-
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">createDate</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+              <!--<nz-datepicker [nzSize]="'large'" formControlName="createDate" class="form-control"></nz-datepicker>-->
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24">lastUpdateTime</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzHasFeedback>
+              <!--<nz-datepicker [nzSize]="'large'" formControlName="lastUpdateTime" class="form-control"></<br>-->
+            </nz-form-control>
+          </nz-form-item>
           <div class="ant-card-bordered ant-card">
             <div class="ant-card-head">
-              <h3 class="ant-card-head-title">
-                Properties
-              </h3>
+              <h3 class="ant-card-head-title">Properties</h3>
               <div class="ant-card-extra">
                 <a (click)="addProperty()">
                   <i class="anticon anticon-plus"></i>
@@ -112,47 +70,30 @@
                 </a>
               </div>
             </div>
-
             <div class="ant-card-body">
               <div formArrayName="properties">
-                <div *ngFor="let x of properties.controls; let i=index"
-                     [formGroupName]="i">
-                  <div nz-form-item nz-row>
-                 
-                    <div nz-form-label nz-col [nzSm]="4">
-                      <label for="key" nz-form-item-required>
-                        Key
-                      </label>
-                    </div>
-                    <div nz-form-control nz-col [nzSm]="6">
-                      <nz-input [nzSize]="'large'" [nzDisabled]="x.controls.default?.value==true" formControlName="key"></nz-input>
-                    </div>
-
-                    <div nz-form-label nz-col [nzSm]="4">
-                      <label for="value" nz-form-item-required>
-                        Value
-                      </label>
-                    </div>
-
-                    <div nz-form-control nz-col [nzSpan]="6">
-                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="value"></nz-input>
+                <div *ngFor="let x of properties.controls; let i=index" [formGroupName]="i">
+                  <nz-form-item>
+                    <nz-form-label [nzSm]="4">Key</nz-form-label>
+                    <nz-form-control [nzSm]="6">
+                      <input [nzSize]="'large'" disabled="{{x.controls.default?.value}}" formControlName="key" nz-input>
+                    </nz-form-control>
+                    <nz-form-label [nzSm]="4">Value</nz-form-label>
+                    <nz-form-control [nzSpan]="6">
+                      <input style="width: 80%; margin-right:8px;" class="form-control" formControlName="value" nz-input>
                       <i *ngIf="x.controls.default?.value!=true" class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delProperty(i,$event)"></i>
-                    </div>
-                  </div>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div nz-col [nzSpan]="1"></div>
-
-        <div nz-col [nzSpan]="10">
+        </nz-col>
+        <nz-col [nzSpan]="1"></nz-col>
+        <nz-col [nzSpan]="10">
           <div class="ant-card-bordered ant-card">
             <div class="ant-card-head">
-              <h3 class="ant-card-head-title">
-                Hosts
-              </h3>
+              <h3 class="ant-card-head-title">Hosts</h3>
               <div class="ant-card-extra">
                 <a (click)="addHost()">
                   <i class="anticon anticon-plus"></i>
@@ -160,29 +101,23 @@
                 </a>
               </div>
             </div>
-
             <div class="ant-card-body">
               <div formArrayName="hosts">
-                <div *ngFor="let x of hosts.controls; let i=index"
-                     [formGroupName]="i">
-                  <div nz-form-item nz-row>
-                    <div nz-form-control nz-col [nzSpan]="12">
-                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="hostName"></nz-input>
+                <div *ngFor="let x of hosts.controls; let i=index" [formGroupName]="i">
+                  <nz-form-item>
+                    <nz-form-control [nzSpan]="12">
+                      <input style="width: 80%; margin-right:8px;" class="form-control" formControlName="hostName" nz-input>
                       <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delHost(i)"></i>
-                    </div>
-                  </div>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
               </div>
             </div>
           </div>
-
-          <br />
-
+          <br>
           <div class="ant-card-bordered ant-card">
             <div class="ant-card-head">
-              <h3 class="ant-card-head-title">
-                Claims
-              </h3>
+              <h3 class="ant-card-head-title">Claims</h3>
               <div class="ant-card-extra">
                 <a (click)="addClaim()">
                   <i class="anticon anticon-plus"></i>
@@ -190,46 +125,31 @@
                 </a>
               </div>
             </div>
-
             <div class="ant-card-body">
               <div formArrayName="claims">
-                <div *ngFor="let x of claims.controls; let i=index"
-                     [formGroupName]="i">
-                  <div nz-form-item nz-row>
-
-                    <div nz-form-label nz-col [nzSm]="4">
-                      <label for="claimType" nz-form-item-required>
-                        claimType
-                      </label>
-                    </div>
-                    <div nz-form-control nz-col [nzSm]="6">
-                      <nz-input [nzSize]="'large'" formControlName="claimType"></nz-input>
-                    </div>
-
-                    <div nz-form-label nz-col [nzSm]="4">
-                      <label for="claimValue" nz-form-item-required>
-                        claimValue
-                      </label>
-                    </div>
-
-                    <div nz-form-control nz-col [nzSpan]="6">
-                      <nz-input style="width: 80%; margin-right:8px;" class="form-control" formControlName="claimValue"></nz-input>
+                <div *ngFor="let x of claims.controls; let i=index" [formGroupName]="i">
+                  <nz-form-item>
+                    <nz-form-label [nzSm]="4">claimType</nz-form-label>
+                    <nz-form-control [nzSm]="6">
+                      <input [nzSize]="'large'" formControlName="claimType" nz-input>
+                    </nz-form-control>
+                    <nz-form-label [nzSm]="4">claimValue</nz-form-label>
+                    <nz-form-control [nzSpan]="6">
+                      <input style="width: 80%; margin-right:8px;" class="form-control" formControlName="claimValue" nz-input>
                       <i class="anticon anticon-minus-circle-o dynamic-delete-button" (click)="delClaim(i,$event)"></i>
-                    </div>
-                  </div>
+                    </nz-form-control>
+                  </nz-form-item>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-       </div>
-
-
-        <footer-toolbar fixed-btns>
-          <error-collect></error-collect>
-          <button nz-button [nzSize]="'large'" [nzType]="'primary'">{{id>0?'更新':'创建'}}</button>
-          <button nz-button [nzSize]="'large'" routerLink="../../">返回</button>
-        </footer-toolbar>
-</form>
+        </nz-col>
+      </nz-row>
+      <footer-toolbar fixed-btns>
+        <error-collect></error-collect>
+        <button nz-button [nzSize]="'large'" [nzType]="'primary'">{{id>0?'更新':'创建'}}</button>
+        <button nz-button [nzSize]="'large'" routerLink="../../">返回</button>
+      </footer-toolbar>
+    </form>
   </nz-spin>
 </nz-card>
